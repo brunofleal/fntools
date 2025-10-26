@@ -9,15 +9,15 @@ const Logo = () => {
             gap={0}
             justifyContent="center"
             bgGradient="to-r"
-            gradientFrom="red.400"
-            gradientTo="green.400"
+            gradientFrom="purple.400"
+            gradientTo="white.400"
         >
             <Text
                 fontSize="3xl"
                 fontWeight="extrabold"
                 WebkitTextStroke="1px black"
             >
-                EduRod
+                ParaFono
             </Text>
         </HStack>
     );

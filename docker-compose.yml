@@ -5,7 +5,7 @@ services:
             args:
                 MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
                 MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-        container_name: mongolocal
+        container_name: parafono-mongolocal
         ports:
             - "27017:27017"
         environment:
@@ -17,7 +17,7 @@ services:
 
     backend:
         build: ./backend
-        container_name: edurod-backend
+        container_name: parafono-backend
         ports:
             - "${BACKEND_PORT}:8000"
         environment:
@@ -35,7 +35,7 @@ services:
             context: ./frontend
             args:
                 VITE_BASE_URL: ${VITE_BASE_URL}
-        container_name: edurod-frontend
+        container_name: parafono-frontend
         ports:
             - "80:80"
             - "443:443"

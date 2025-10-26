@@ -26,6 +26,7 @@ const RegisterPage = () => {
                         draggable: true,
                         theme: "light",
                     });
+                    navigate("/");
                 } else {
                     toast.error("Falha na criação do usuário", {
                         position: "top-center",

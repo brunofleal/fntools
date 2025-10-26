@@ -1,9 +1,7 @@
-import { createBrowserRouter, type RouteObject } from "react-router";
+import { createBrowserRouter, type RouteObject, redirect } from "react-router";
 import LoginPage from "../../pages/LoginPage/LoginPage";
 import HomePage from "../../pages/HomePage/HomePage";
 import NavbarWrapper from "../../components/NavbarWrapper/NavbarWrapper";
-import OccurrencePage from "../../pages/OcurrencePage/OccurrencesPage";
-import ReportsPage from "../../pages/ReportsPage/ReportsPage";
 import AdminPage from "../../pages/AdminPage/AdminPage";
 import RegisterPage from "../../pages/RegisterPage/RegisterPage";
 import NoAccessPermissionPage from "../../pages/NoAccessPermissionPage/NoAccessPermissionPage";
@@ -12,14 +10,16 @@ import OnboardPage from "../../pages/OnboardPage/OnboardPage";
 
 const routes: RouteObject[] = [
     {
+        path: "/landing",
+        Component: HomePage,
+    },
+    {
         path: "/login",
         Component: LoginPage,
-        //loader: loadRootData, //TODO Add
     },
     {
         path: "/register",
         Component: RegisterPage,
-        //loader: loadRootData, //TODO Add
     },
     {
         path: "/",
@@ -27,7 +27,7 @@ const routes: RouteObject[] = [
         children: [
             {
                 path: "/",
-                Component: HomePage,
+                loader: () => redirect("/landing"),
             },
             {
                 path: "/no-access-permission",
@@ -36,14 +36,6 @@ const routes: RouteObject[] = [
             {
                 path: "/onboard",
                 Component: OnboardPage,
-            },
-            {
-                path: "/occurrences",
-                Component: OccurrencePage,
-            },
-            {
-                path: "/reports",
-                Component: ReportsPage,
             },
             {
                 path: "/admin",

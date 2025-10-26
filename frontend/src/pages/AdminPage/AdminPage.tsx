@@ -35,24 +35,6 @@ const AdminPage = () => {
                             attributes={["name", "email", "password", "roles"]}
                         />
                     </Tabs.Content>
-                    <Tabs.Content value="tab-2">
-                        <PanelGrid
-                            url="/api/drivers"
-                            attributes={["matricula", "name"]}
-                        />
-                    </Tabs.Content>
-                    <Tabs.Content value="tab-3">
-                        <PanelGrid
-                            url="/api/lines"
-                            attributes={["code", "description"]}
-                        />
-                    </Tabs.Content>
-                    <Tabs.Content value="tab-4">
-                        <PanelGrid
-                            url="/api/occurrenceTypes"
-                            attributes={["description", "points"]}
-                        />
-                    </Tabs.Content>
                     <Tabs.Content value="tab-5">
                         <SystemVariablesPanel />
                     </Tabs.Content>

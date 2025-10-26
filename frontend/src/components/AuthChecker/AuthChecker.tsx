@@ -8,7 +8,8 @@ const AuthChecker = () => {
 
     const checkAuth = () => {
         const token = getToken();
-        if (!token) {
+        console.log(location);
+        if (!token && location.pathname != "/") {
             navigate("/login");
         }
     };

@@ -1,9 +1,11 @@
 import axios from "axios";
 import { deleteToken, getToken } from "./token";
 
-console.log(`Using backend url: ${import.meta.env.VITE_BASE_URL}`);
+const baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:8000";
+console.log(`Using backend url: ${baseURL}`);
+console.log("Available env vars:", import.meta.env);
 const axiosApi = axios.create({
-    baseURL: import.meta.env.VITE_BASE_URL,
+    baseURL,
 });
 
 // Request interceptor to add auth-token header
