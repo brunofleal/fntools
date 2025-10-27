@@ -5,15 +5,13 @@ const OnboardPage = () => {
         <Box>
             <Alert.Root status="success">
                 <Alert.Indicator />
-                <Alert.Title>
-                    Sua conta no Edurod foi criada com sucesso!
-                </Alert.Title>
+                <Alert.Title>Conta criada com sucesso</Alert.Title>
             </Alert.Root>
             <Alert.Root status="info">
                 <Alert.Indicator />
                 <Alert.Title>
-                    Contate um administrador e peça para adicionar permissões de
-                    acesso.
+                    Para começar a usar a aplicação, é preciso pagar a
+                    mensalidade
                 </Alert.Title>
             </Alert.Root>
         </Box>

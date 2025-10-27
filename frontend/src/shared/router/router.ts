@@ -7,6 +7,8 @@ import RegisterPage from "../../pages/RegisterPage/RegisterPage";
 import NoAccessPermissionPage from "../../pages/NoAccessPermissionPage/NoAccessPermissionPage";
 import NotFoundPage from "../../pages/NotFoundPage/NotFoundPage";
 import OnboardPage from "../../pages/OnboardPage/OnboardPage";
+import MethodsPage from "../../pages/MethodsPage/MethodsPage";
+import ABFWPage from "../../pages/Methods/ABFWPage/ABFWPage";
 
 const routes: RouteObject[] = [
     {
@@ -36,6 +38,14 @@ const routes: RouteObject[] = [
             {
                 path: "/onboard",
                 Component: OnboardPage,
+            },
+            {
+                path: "/methods",
+                Component: MethodsPage,
+            },
+            {
+                path: "/methods/abfw",
+                Component: ABFWPage,
             },
             {
                 path: "/admin",

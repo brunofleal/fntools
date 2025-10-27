@@ -14,7 +14,7 @@ const LoginPage = () => {
 
     useEffect(() => {
         if (getToken()) {
-            navigate("/");
+            navigate("/reports");
         }
     }, []);
 

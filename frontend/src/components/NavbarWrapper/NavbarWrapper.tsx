@@ -58,8 +58,7 @@ const NavbarContent = () => {
                     <Box cursor="pointer" onClick={() => navigate("/")}>
                         <Logo />
                     </Box>
-                    <NavLink to="/occurrences" label="Ocorrências" />
-                    <NavLink to="/reports" label="Relatórios" />
+                    <NavLink to="/methods" label="Metódos" />
                     {canViewAdmin ? (
                         <NavLink to="/admin" label="Administração" />
                     ) : (
