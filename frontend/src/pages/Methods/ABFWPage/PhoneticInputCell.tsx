@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Text, Input, HStack, VStack, Field } from "@chakra-ui/react";
-import { WordAndTranscription } from "../../../interfaces/word";
+import {
+    SourceAndTarget,
+    WordAndTranscription,
+} from "../../../interfaces/word";
 import PhoneticKeyboard from "./PhoneticKeyboard";
 import { BsInfoCircle } from "react-icons/bs";
 import { Tooltip } from "../../../components/ui/tooltip";
@@ -8,9 +11,32 @@ import { Tooltip } from "../../../components/ui/tooltip";
 interface Props {
     index: number;
     wordAndTranscription: WordAndTranscription;
+    setSourcesAndTargets: Function;
 }
-const PhoneticInputCell = ({ index, wordAndTranscription }: Props) => {
+const PhoneticInputCell = ({
+    index,
+    wordAndTranscription,
+    setSourcesAndTargets,
+}: Props) => {
     const [transcription, setTranscription] = useState("");
+
+    const updateSourcesAndTargets = () => {
+        const sourceAndTarget: SourceAndTarget = {
+            source: transcription,
+            target: wordAndTranscription.transcription,
+        };
+        setSourcesAndTargets((sourcesAndTargets: any) => {
+            return { ...sourcesAndTargets, [index]: sourceAndTarget };
+        });
+    };
+
+    useEffect(() => {
+        updateSourcesAndTargets();
+    }, [wordAndTranscription, transcription]);
+
+    useEffect(() => {
+        updateSourcesAndTargets();
+    }, []);
 
     const WordIdentifier = (
         <VStack>
