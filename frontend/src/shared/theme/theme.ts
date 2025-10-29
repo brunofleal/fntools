@@ -21,8 +21,12 @@ export const system = createSystem(defaultConfig, {
     theme: {
         tokens: {
             fonts: {
-                heading: { value: `'Roboto', sans-serif` },
-                body: { value: `'Roboto', sans-serif` },
+                heading: {
+                    value: `'Inter', 'Segoe UI', 'Helvetica Neue', sans-serif`,
+                },
+                body: {
+                    value: `'Inter', 'Segoe UI', 'Helvetica Neue', sans-serif`,
+                },
             },
         },
         recipes: {

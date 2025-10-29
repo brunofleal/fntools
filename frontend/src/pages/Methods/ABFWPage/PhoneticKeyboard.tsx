@@ -1,4 +1,4 @@
-import React, { useState, useRef, JSX } from "react";
+import React, { useState, useRef, useEffect, JSX } from "react";
 import {
     Box,
     Button,
@@ -10,6 +10,7 @@ import {
     Input,
 } from "@chakra-ui/react";
 import { BsEraser, BsKeyboard } from "react-icons/bs";
+import { consonants, diacritics, vowels } from "./words";
 
 interface Props {
     currentTranscription: string;
@@ -24,60 +25,9 @@ const PhoneticKeyboard = ({
 }: Props) => {
     const [isOpen, setIsOpen] = useState(false);
     const buttonRef = useRef<HTMLButtonElement>(null);
+    const portalRef = useRef<HTMLDivElement>(null);
 
     // Common IPA symbols organized by category
-    const consonants = [
-        "p",
-        "b",
-        "t",
-        "d",
-        "k",
-        "g",
-        "ʔ",
-        "f",
-        "v",
-        "θ",
-        "ð",
-        "s",
-        "z",
-        "ʃ",
-        "ʒ",
-        "h",
-        "m",
-        "n",
-        "ŋ",
-        "l",
-        "r",
-        "ɹ",
-        "w",
-        "j",
-        "tʃ",
-        "dʒ",
-        "ts",
-        "dz",
-    ];
-
-    const vowels = [
-        "i",
-        "ɪ",
-        "e",
-        "ɛ",
-        "æ",
-        "a",
-        "ɑ",
-        "ɔ",
-        "o",
-        "ʊ",
-        "u",
-        "ɨ",
-        "ə",
-        "ɚ",
-        "ɝ",
-        "ʌ",
-        "ɒ",
-    ];
-
-    const diacritics = ["ˈ", "ˌ", ":", "ʰ", "ʷ", "ʲ", "ⁿ", "̃", "̥", "̬"];
 
     const handleSymbolClick = (symbol: string) => {
         setTranscription(currentTranscription + symbol);
@@ -90,6 +40,29 @@ const PhoneticKeyboard = ({
     const handleToggle = () => {
         setIsOpen(!isOpen);
     };
+
+    // Close portal when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                isOpen &&
+                portalRef.current &&
+                !portalRef.current.contains(event.target as Node) &&
+                buttonRef.current &&
+                !buttonRef.current.contains(event.target as Node)
+            ) {
+                setIsOpen(false);
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isOpen]);
 
     return (
         <>
@@ -120,6 +93,7 @@ const PhoneticKeyboard = ({
                         borderColor="gray.200"
                         borderRadius="md"
                         p={3}
+                        ref={portalRef}
                     >
                         <VStack gap={3} align="stretch">
                             <HStack justify="space-between" align="flex-start">
