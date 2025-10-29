@@ -10,7 +10,7 @@ import {
     Input,
 } from "@chakra-ui/react";
 import { BsEraser, BsKeyboard } from "react-icons/bs";
-import { consonants, diacritics, vowels } from "./words";
+import { consonants, vowels } from "./words";
 
 interface Props {
     currentTranscription: string;
@@ -26,11 +26,16 @@ const PhoneticKeyboard = ({
     const [isOpen, setIsOpen] = useState(false);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const portalRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     // Common IPA symbols organized by category
 
     const handleSymbolClick = (symbol: string) => {
         setTranscription(currentTranscription + symbol);
+        // Focus the input after adding the symbol
+        setTimeout(() => {
+            inputRef.current?.focus();
+        }, 0);
     };
 
     const handleErase = () => {
@@ -104,6 +109,7 @@ const PhoneticKeyboard = ({
                                     </Text>
                                     <HStack>
                                         <Input
+                                            ref={inputRef}
                                             size="xs"
                                             value={currentTranscription}
                                             onChange={(e) =>
@@ -138,7 +144,7 @@ const PhoneticKeyboard = ({
                                         Consoantes
                                     </Text>
                                     <Grid
-                                        templateColumns="repeat(6, 1fr)"
+                                        templateColumns="repeat(4, 1fr)"
                                         gap={1}
                                     >
                                         {consonants.map((symbol) => (
@@ -204,25 +210,6 @@ const PhoneticKeyboard = ({
                                 >
                                     Diacríticos e Suprassegmentais
                                 </Text>
-                                <Grid templateColumns="repeat(5, 1fr)" gap={1}>
-                                    {diacritics.map((symbol) => (
-                                        <Button
-                                            key={symbol}
-                                            size="xs"
-                                            variant="solid"
-                                            onClick={() =>
-                                                handleSymbolClick(symbol)
-                                            }
-                                            _hover={{ bg: "gray.400" }}
-                                            fontFamily="serif"
-                                            fontSize="xs"
-                                            minW="24px"
-                                            h="24px"
-                                        >
-                                            {symbol}
-                                        </Button>
-                                    ))}
-                                </Grid>
                             </Box>
                         </VStack>
                     </Box>
