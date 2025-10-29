@@ -1,19 +1,30 @@
-import React from "react";
-import { Box, Button, Grid, Text, VStack } from "@chakra-ui/react";
+import React, { useState, useRef, JSX } from "react";
 import {
-    PopoverRoot,
-    PopoverTrigger,
-    PopoverContent,
-    PopoverHeader,
-    PopoverBody,
-    PopoverCloseTrigger,
+    Box,
+    Button,
+    Grid,
+    Text,
+    VStack,
+    Portal,
+    HStack,
+    Input,
 } from "@chakra-ui/react";
+import { BsEraser, BsKeyboard } from "react-icons/bs";
 
 interface Props {
-    onSymbolSelect: (symbol: string) => void;
+    currentTranscription: string;
+    setTranscription: (symbol: string) => void;
+    children?: JSX.Element;
 }
 
-const PhoneticKeyboard = ({ onSymbolSelect }: Props) => {
+const PhoneticKeyboard = ({
+    currentTranscription,
+    setTranscription,
+    children,
+}: Props) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+
     // Common IPA symbols organized by category
     const consonants = [
         "p",
@@ -69,135 +80,181 @@ const PhoneticKeyboard = ({ onSymbolSelect }: Props) => {
     const diacritics = ["ˈ", "ˌ", ":", "ʰ", "ʷ", "ʲ", "ⁿ", "̃", "̥", "̬"];
 
     const handleSymbolClick = (symbol: string) => {
-        onSymbolSelect(symbol);
+        setTranscription(currentTranscription + symbol);
+    };
+
+    const handleErase = () => {
+        setTranscription("");
+    };
+
+    const handleToggle = () => {
+        setIsOpen(!isOpen);
     };
 
     return (
-        <PopoverRoot
-            positioning={{
-                strategy: "fixed",
-                placement: "bottom-start",
-                flip: true,
-                shift: 8,
-            }}
-        >
-            <PopoverTrigger>
-                <Button size="xs" variant="outline" colorScheme="blue">
-                    Teclado IPA
-                </Button>
-            </PopoverTrigger>
-            <PopoverContent
-                width="320px"
-                maxHeight="400px"
-                overflow="auto"
-                zIndex={9999}
-                boxShadow="lg"
-                position="fixed"
-                bg="white"
-                border="1px solid"
-                borderColor="gray.200"
+        <>
+            <Button
+                ref={buttonRef}
+                size="xs"
+                variant="outline"
+                colorScheme="blue"
+                onClick={handleToggle}
             >
-                <PopoverHeader py={2}>
-                    <Text fontWeight="bold" fontSize="sm">
-                        IPA Symbols
-                    </Text>
-                </PopoverHeader>
-                <PopoverCloseTrigger />
-                <PopoverBody py={2}>
-                    <VStack gap={3} align="stretch">
-                        <Box>
-                            <Text
-                                fontSize="sm"
-                                fontWeight="semibold"
-                                mb={2}
-                                color="gray.600"
-                            >
-                                Consonants
-                            </Text>
-                            <Grid templateColumns="repeat(8, 1fr)" gap={1}>
-                                {consonants.map((symbol) => (
-                                    <Button
-                                        key={symbol}
-                                        size="xs"
-                                        variant="ghost"
-                                        onClick={() =>
-                                            handleSymbolClick(symbol)
-                                        }
-                                        _hover={{ bg: "blue.50" }}
-                                        fontFamily="serif"
-                                        fontSize="xs"
-                                        minW="24px"
-                                        h="24px"
-                                    >
-                                        {symbol}
-                                    </Button>
-                                ))}
-                            </Grid>
-                        </Box>
+                <BsKeyboard />
+            </Button>
 
-                        <Box>
-                            <Text
-                                fontSize="sm"
-                                fontWeight="semibold"
-                                mb={2}
-                                color="gray.600"
-                            >
-                                Vowels
-                            </Text>
-                            <Grid templateColumns="repeat(6, 1fr)" gap={1}>
-                                {vowels.map((symbol) => (
-                                    <Button
-                                        key={symbol}
-                                        size="xs"
-                                        variant="ghost"
-                                        onClick={() =>
-                                            handleSymbolClick(symbol)
-                                        }
-                                        _hover={{ bg: "blue.50" }}
-                                        fontFamily="serif"
-                                        fontSize="xs"
-                                        minW="24px"
-                                        h="24px"
-                                    >
-                                        {symbol}
-                                    </Button>
-                                ))}
-                            </Grid>
-                        </Box>
+            {isOpen && (
+                <Portal>
+                    <Box
+                        position="fixed"
+                        bottom="25%"
+                        left="50%"
+                        transform="translateX(-50%)"
+                        width="320px"
+                        maxHeight="400px"
+                        overflow="auto"
+                        zIndex={9999}
+                        boxShadow="lg"
+                        bg="white"
+                        border="1px solid"
+                        borderColor="gray.200"
+                        borderRadius="md"
+                        p={3}
+                    >
+                        <VStack gap={3} align="stretch">
+                            <HStack justify="space-between" align="flex-start">
+                                {children}
+                                <VStack w="200px">
+                                    <Text color="gray.600" fontSize="xs">
+                                        Transcrição Fonética
+                                    </Text>
+                                    <HStack>
+                                        <Input
+                                            size="xs"
+                                            value={currentTranscription}
+                                            onChange={(e) =>
+                                                setTranscription(e.target.value)
+                                            }
+                                        />
+                                        <Button
+                                            size={"xs"}
+                                            onClick={handleErase}
+                                        >
+                                            <BsEraser />
+                                        </Button>
+                                    </HStack>
+                                </VStack>
+                                <Button
+                                    size="xs"
+                                    variant="ghost"
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    ✕
+                                </Button>
+                            </HStack>
 
-                        <Box>
-                            <Text
-                                fontSize="sm"
-                                fontWeight="semibold"
-                                mb={2}
-                                color="gray.600"
-                            >
-                                Diacritics & Suprasegmentals
-                            </Text>
-                            <Grid templateColumns="repeat(5, 1fr)" gap={1}>
-                                {diacritics.map((symbol) => (
-                                    <Button
-                                        key={symbol}
-                                        size="xs"
-                                        variant="ghost"
-                                        onClick={() =>
-                                            handleSymbolClick(symbol)
-                                        }
-                                        _hover={{ bg: "blue.50" }}
-                                        fontFamily="serif"
-                                        fontSize="xs"
-                                        minW="24px"
-                                        h="24px"
+                            <HStack gap={4} align="flex-start">
+                                <Box flex="1">
+                                    <Text
+                                        fontSize="sm"
+                                        fontWeight="semibold"
+                                        mb={2}
+                                        color="gray.600"
                                     >
-                                        {symbol}
-                                    </Button>
-                                ))}
-                            </Grid>
-                        </Box>
-                    </VStack>
-                </PopoverBody>
-            </PopoverContent>
-        </PopoverRoot>
+                                        Consoantes
+                                    </Text>
+                                    <Grid
+                                        templateColumns="repeat(6, 1fr)"
+                                        gap={1}
+                                    >
+                                        {consonants.map((symbol) => (
+                                            <Button
+                                                key={symbol}
+                                                size="xs"
+                                                variant="solid"
+                                                onClick={() =>
+                                                    handleSymbolClick(symbol)
+                                                }
+                                                _hover={{ bg: "gray.400" }}
+                                                fontFamily="serif"
+                                                fontSize="xs"
+                                                minW="24px"
+                                                h="24px"
+                                            >
+                                                {symbol}
+                                            </Button>
+                                        ))}
+                                    </Grid>
+                                </Box>
+
+                                <Box flex="1">
+                                    <Text
+                                        fontSize="sm"
+                                        fontWeight="semibold"
+                                        mb={2}
+                                        color="gray.600"
+                                    >
+                                        Vogais
+                                    </Text>
+                                    <Grid
+                                        templateColumns="repeat(4, 1fr)"
+                                        gap={1}
+                                    >
+                                        {vowels.map((symbol) => (
+                                            <Button
+                                                key={symbol}
+                                                size="xs"
+                                                variant="solid"
+                                                onClick={() =>
+                                                    handleSymbolClick(symbol)
+                                                }
+                                                _hover={{ bg: "gray.400" }}
+                                                fontFamily="serif"
+                                                fontSize="xs"
+                                                minW="24px"
+                                                h="24px"
+                                            >
+                                                {symbol}
+                                            </Button>
+                                        ))}
+                                    </Grid>
+                                </Box>
+                            </HStack>
+
+                            <Box>
+                                <Text
+                                    fontSize="sm"
+                                    fontWeight="semibold"
+                                    mb={2}
+                                    color="gray.600"
+                                >
+                                    Diacríticos e Suprassegmentais
+                                </Text>
+                                <Grid templateColumns="repeat(5, 1fr)" gap={1}>
+                                    {diacritics.map((symbol) => (
+                                        <Button
+                                            key={symbol}
+                                            size="xs"
+                                            variant="solid"
+                                            onClick={() =>
+                                                handleSymbolClick(symbol)
+                                            }
+                                            _hover={{ bg: "gray.400" }}
+                                            fontFamily="serif"
+                                            fontSize="xs"
+                                            minW="24px"
+                                            h="24px"
+                                        >
+                                            {symbol}
+                                        </Button>
+                                    ))}
+                                </Grid>
+                            </Box>
+                        </VStack>
+                    </Box>
+                </Portal>
+            )}
+        </>
     );
 };
 
