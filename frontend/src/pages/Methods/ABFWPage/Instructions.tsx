@@ -12,7 +12,7 @@ const Instructions = () => {
     const { open, onToggle } = useDisclosure();
 
     return (
-        <Box p={4}>
+        <Box>
             <HStack>
                 <Text color="gray.600" mb={4}>
                     O ABFW (Avaliação Fonológica da Criança) é uma ferramenta
