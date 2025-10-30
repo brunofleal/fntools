@@ -11,6 +11,7 @@ mongoose.set("strictQuery", false);
 // Route imports
 const homeRoutes = require("./routes/home");
 const authRoutes = require("./routes/auth");
+const abfwRoutes = require("./routes/abfw");
 
 const systemVariablesRoutes = require("./routes/systemVariablesRoute");
 
@@ -40,7 +41,11 @@ app.use(limiter);
 // Request logging middleware
 app.use((req, res, next) => {
     console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
-    if (req.body && Object.keys(req.body).length > 0) {
+    if (
+        req.body &&
+        Object.keys(req.body).length > 0 &&
+        process.env.MODE == "debug"
+    ) {
         console.log("Request body:", JSON.stringify(req.body, null, 2));
     }
     next();
@@ -49,6 +54,7 @@ app.use((req, res, next) => {
 // -> Route Middlewares
 app.use("/", homeRoutes);
 app.use("/api/user", authRoutes);
+app.use("/api/abfw", abfwRoutes);
 
 app.use("/api/systemVariables", systemVariablesRoutes);
 

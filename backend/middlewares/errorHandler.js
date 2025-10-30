@@ -1,11 +1,35 @@
+const fs = require("fs");
+const path = require("path");
+
+// Create logs directory if it doesn't exist
+const logsDir = path.join(__dirname, "..", "logs");
+if (!fs.existsSync(logsDir)) {
+    fs.mkdirSync(logsDir, { recursive: true });
+}
+
+// Helper function to write to log file
+const writeToLog = (message, writeToConsole) => {
+    const logFile = path.join(
+        logsDir,
+        `error-${new Date().toISOString().split("T")[0]}.log`
+    );
+    const timestamp = new Date().toISOString();
+    const logMessage = `[${timestamp}] ${message}\n`;
+
+    fs.appendFileSync(logFile, logMessage, "utf8");
+    if (writeToConsole) {
+        console.error(message);
+    }
+};
+
 const errorHandler = (err, req, res, next) => {
-    console.error("=== ERROR OCCURRED ===");
-    console.error("Timestamp:", new Date().toISOString());
-    console.error("Request:", req.method, req.path);
-    console.error("Query params:", JSON.stringify(req.query, null, 2));
-    console.error("Request body:", JSON.stringify(req.body, null, 2));
-    console.error("Error name:", err.name);
-    console.error("Error message:", err.message);
+    writeToLog("=== ERROR OCCURRED ===", true);
+    writeToLog("Timestamp: " + new Date().toISOString(), true);
+    writeToLog("Request: " + req.method + " " + req.path, true);
+    writeToLog("Query params: " + JSON.stringify(req.query, null, 2));
+    writeToLog("Request body: " + JSON.stringify(req.body, null, 2));
+    writeToLog("Error name: " + err.name, true);
+    writeToLog("Error message: " + err.message, true);
 
     let statusCode = 500;
     let errorMessage = "Internal server error";
@@ -13,7 +37,56 @@ const errorHandler = (err, req, res, next) => {
 
     // Handle different types of errors
     if (err.name === "ValidationError") {
-        console.error("=== MONGOOSE VALIDATION ERROR ===");
+        writeToLog("=== MONGOOSE VALIDATION ERROR ===");
+        statusCode = 400;
+        errorMessage = "Validation failed";
+
+        const validationErrors = {};
+        Object.keys(err.errors).forEach((key) => {
+            validationErrors[key] = err.errors[key].message;
+            writeToLog(`  Field '${key}': ${err.errors[key].message}`);
+            writeToLog(`  Value: ${JSON.stringify(err.errors[key].value)}`);
+            writeToLog(`  Path: ${err.errors[key].path}`);
+        });
+        errorDetails = { validationErrors };
+    } else if (err.code === 11000) {
+        writeToLog("=== DUPLICATE KEY ERROR ===");
+        statusCode = 400;
+        errorMessage = "Duplicate entry found";
+
+        const duplicateField = Object.keys(err.keyPattern || {})[0];
+        const duplicateValue = err.keyValue
+            ? err.keyValue[duplicateField]
+            : "unknown";
+
+        writeToLog("Duplicate field: " + duplicateField);
+        writeToLog("Duplicate value: " + duplicateValue);
+        writeToLog("Key pattern: " + JSON.stringify(err.keyPattern));
+
+        errorDetails = {
+            field: duplicateField,
+            value: duplicateValue,
+            message: `${duplicateField} '${duplicateValue}' already exists`,
+        };
+    } else if (err.name === "CastError") {
+        writeToLog("=== CAST ERROR (Invalid ID/Type) ===");
+        statusCode = 400;
+        errorMessage = "Invalid data format";
+
+        writeToLog("Cast error path: " + err.path);
+        writeToLog("Cast error value: " + err.value);
+        writeToLog("Cast error kind: " + err.kind);
+
+        errorDetails = {
+            field: err.path,
+            value: err.value,
+            expectedType: err.kind,
+            message: `Invalid ${err.kind} format for field '${err.path}'`,
+        };
+    } else if (err.name === "MongoServerError" || err.name === "MongoError") {
+        writeToLog("=== MONGODB SERVER ERROR ===");
+        writeToLog("MongoDB error code: " + err.code);
+        writeToLog("MongoDB error codeName: " + err.codeName);
         statusCode = 400;
         errorMessage = "Validation failed";
 
@@ -69,8 +142,8 @@ const errorHandler = (err, req, res, next) => {
             case 2:
                 statusCode = 400;
                 errorMessage = "Invalid data format (BadValue)";
-                console.error("BadValue error - check data types in request");
-                console.error("Error details:", err.errmsg || err.message);
+                writeToLog("BadValue error - check data types in request");
+                writeToLog("Error details: " + (err.errmsg || err.message));
                 errorDetails = {
                     mongoCode: err.code,
                     mongoCodeName: err.codeName,
@@ -97,7 +170,7 @@ const errorHandler = (err, req, res, next) => {
                 };
         }
     } else if (err.name === "JsonWebTokenError") {
-        console.error("=== JWT ERROR ===");
+        writeToLog("=== JWT ERROR ===");
         statusCode = 401;
         errorMessage = "Invalid authentication token";
     } else if (err.status) {
@@ -107,11 +180,11 @@ const errorHandler = (err, req, res, next) => {
 
     // Log the full error stack in development
     if (process.env.NODE_ENV === "development") {
-        console.error("Error stack:", err.stack);
-        console.error("Full error object:", err);
+        writeToLog("Error stack: " + err.stack);
+        writeToLog("Full error object: " + JSON.stringify(err, null, 2));
     }
 
-    console.error("=== END ERROR ===");
+    writeToLog("=== END ERROR ===");
 
     // Send response
     const response = {

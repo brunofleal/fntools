@@ -67,8 +67,9 @@ const Instructions = () => {
                                         color="blue.700"
                                         textAlign="center"
                                     >
-                                        Apresente à criança figuras ou objetos
-                                        para nomeação espontânea
+                                        Para cada palavra da lista, apresente à
+                                        criança figuras ou objetos para nomeação
+                                        espontânea
                                     </Text>
                                 </Box>
                                 <Box
@@ -92,8 +93,8 @@ const Instructions = () => {
                                         color="blue.700"
                                         textAlign="center"
                                     >
-                                        Registre a pronúncia da criança de cada
-                                        palavra-alvo
+                                        Registre a transcrição da pronúncia da
+                                        criança de cada palavra-alvo
                                     </Text>
                                 </Box>
                                 <Box
@@ -117,8 +118,9 @@ const Instructions = () => {
                                         color="blue.700"
                                         textAlign="center"
                                     >
-                                        Anote qualquer processo fonológico ou
-                                        substituições de sons
+                                        Determine os fonemas corretos de cada
+                                        transcrição, verde significa correto e
+                                        vermelho significa incorreto.
                                     </Text>
                                 </Box>
                                 <Box
@@ -142,8 +144,8 @@ const Instructions = () => {
                                         color="blue.700"
                                         textAlign="center"
                                     >
-                                        Complete o formulário de pontuação
-                                        baseado nas respostas da criança
+                                        Confirme a geração do relatório e
+                                        confira os resultados
                                     </Text>
                                 </Box>
                             </Box>

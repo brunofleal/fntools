@@ -1,20 +1,119 @@
-import { Box, Flex, Grid, GridItem, Heading, HStack } from "@chakra-ui/react";
+import {
+    Box,
+    Button,
+    Flex,
+    Grid,
+    GridItem,
+    Heading,
+    HStack,
+    Input,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 import Instructions from "./Instructions";
 import { wordsImitation, wordsNomeation } from "./words";
 import PhoneticInputCell from "./PhoneticInputCell/PhoneticInputCell";
 import { SourceAndTarget } from "../../../interfaces/word";
+import { BsFileEarmarkText } from "react-icons/bs";
+import { axiosApi } from "../../../shared/axiosApi";
+import { toast, ToastContainer } from "react-toastify";
 
 const ABFWPage = () => {
     const [imitationSourcesAndTargets, setImitationSourcesAndTargets] =
         useState<{ [key: number]: SourceAndTarget }>({});
     const [nomeationSourcesAndTargets, setNomeationSourcesAndTargets] =
         useState<{ [key: number]: SourceAndTarget }>({});
+    const [name, setName] = useState("");
+    const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+    const [age, setAge] = useState("");
+    const [reportResponse, setReportResponse] = useState();
+    const [isLoading, setIsLoading] = useState(false);
 
-    //TODO: Send data to backend to calculate
+    const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        if (value === "" || parseInt(value) > 0) {
+            setAge(value);
+        }
+    };
+
+    const handleSubmitData = async () => {
+        try {
+            setIsLoading(true);
+            const payload = {
+                name,
+                date,
+                age: parseInt(age),
+                imitationSourcesAndTargets,
+                nomeationSourcesAndTargets,
+            };
+
+            const response = await axiosApi.post(
+                "api/abfw/generate-report",
+                payload
+            );
+            setReportResponse(response.data);
+
+            toast.success("Relatório gerado com sucesso!", {
+                position: "top-center",
+                autoClose: 15000,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "light",
+            });
+        } catch (error: any) {
+            toast.error(
+                error.response?.data?.message || "Erro ao gerar relatório",
+                {
+                    position: "top-center",
+                    autoClose: 15000,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: "light",
+                }
+            );
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const isSubmitEnabled = name && age && date;
+
     return (
         <Box p={4} maxHeight="86vh" overflowY="auto">
+            <ToastContainer />
             <Instructions />
+            <HStack gap={4} mb={4}>
+                <Box>
+                    <label htmlFor="name">Nome</label>
+                    <Input
+                        id="name"
+                        placeholder="Nome"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                </Box>
+                <Box>
+                    <label htmlFor="age">Idade</label>
+                    <Input
+                        id="age"
+                        type="number"
+                        placeholder="Idade"
+                        value={age}
+                        onChange={handleAgeChange}
+                        min={1}
+                    />
+                </Box>
+                <Box>
+                    <label htmlFor="date">Data</label>
+                    <Input
+                        id="date"
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                    />
+                </Box>
+            </HStack>
             <HStack>
                 <Heading fontSize="5xl">Prova de Imitação</Heading>
             </HStack>
@@ -80,6 +179,15 @@ const ABFWPage = () => {
                     );
                 })}
             </Grid>
+            <Button
+                size="lg"
+                onClick={handleSubmitData}
+                loading={isLoading}
+                disabled={!isSubmitEnabled}
+            >
+                <BsFileEarmarkText />
+                Gerar Relatório
+            </Button>
         </Box>
     );
 };
