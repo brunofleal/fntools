@@ -200,17 +200,6 @@ const PhoneticKeyboard = ({
                                     </Grid>
                                 </Box>
                             </HStack>
-
-                            <Box>
-                                <Text
-                                    fontSize="sm"
-                                    fontWeight="semibold"
-                                    mb={2}
-                                    color="gray.600"
-                                >
-                                    Diacríticos e Suprassegmentais
-                                </Text>
-                            </Box>
                         </VStack>
                     </Box>
                 </Portal>

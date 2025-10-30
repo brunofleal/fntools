@@ -2,14 +2,14 @@ import { Box, Flex, Grid, GridItem, Heading, HStack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import Instructions from "./Instructions";
 import { wordsImitation, wordsNomeation } from "./words";
-import PhoneticInputCell from "./PhoneticInputCell";
+import PhoneticInputCell from "./PhoneticInputCell/PhoneticInputCell";
 import { SourceAndTarget } from "../../../interfaces/word";
 
 const ABFWPage = () => {
     const [imitationSourcesAndTargets, setImitationSourcesAndTargets] =
-        useState<Map<number, SourceAndTarget>>(new Map());
+        useState<{ [key: number]: SourceAndTarget }>({});
     const [nomeationSourcesAndTargets, setNomeationSourcesAndTargets] =
-        useState<Map<number, SourceAndTarget>>(new Map());
+        useState<{ [key: number]: SourceAndTarget }>({});
 
     //TODO: Send data to backend to calculate
     return (
@@ -28,7 +28,7 @@ const ABFWPage = () => {
                 templateColumns={{
                     base: "repeat(1, 1fr)",
                     md: "repeat(2, 1fr)",
-                    xl: "repeat(4, 1fr)",
+                    xl: "repeat(3, 1fr)",
                 }}
                 gap={4}
             >
@@ -41,6 +41,7 @@ const ABFWPage = () => {
                                 setSourcesAndTargets={
                                     setImitationSourcesAndTargets
                                 }
+                                sourcesAndTargets={imitationSourcesAndTargets}
                             />
                         </GridItem>
                     );
@@ -60,7 +61,7 @@ const ABFWPage = () => {
                 templateColumns={{
                     base: "repeat(1, 1fr)",
                     md: "repeat(2, 1fr)",
-                    xl: "repeat(4, 1fr)",
+                    xl: "repeat(3, 1fr)",
                 }}
                 gap={4}
             >
@@ -73,6 +74,7 @@ const ABFWPage = () => {
                                 setSourcesAndTargets={
                                     setNomeationSourcesAndTargets
                                 }
+                                sourcesAndTargets={nomeationSourcesAndTargets}
                             />
                         </GridItem>
                     );
