@@ -8,39 +8,36 @@ const processPhonemes = (sourcesAndTargets) => {
         wrong: 0,
         occurrences: [],
     };
-    for (const sourceAndTarget of sourcesAndTargets) {
-        console.log(sourcesAndTargets);
 
-        if (sourceAndTarget.target) {
-            console.log(sourceAndTarget);
-            sourceAndTarget.target.transcription.forEach((phoneme, index) => {
-                const prev = dataProcessed[phoneme]
-                    ? dataProcessed[phoneme]
-                    : initialCase;
-                const isCorrect = sourceAndTarget.target.hits[index];
-                const delta = {
-                    correct: isCorrect ? 1 : 0,
-                    wrong: isCorrect ? 0 : 1,
-                    occurrences: [
-                        sourceAndTarget.target.transcription.join(""),
-                    ],
-                };
-                const total =
-                    prev.correct + delta.correct + prev.wrong + delta.wrong;
-                const updated = {
-                    correct: prev.correct + delta.correct,
-                    wrong: prev.wrong + delta.wrong,
-                    percentage:
-                        total > 0 ? (prev.correct + delta.correct) / total : 1,
-                    occurrences: new Array(
-                        new Set(prev.occurrences + delta.occurrences)
-                    ),
-                };
-                dataProcessed[phoneme] = updated;
-            });
-            return dataProcessed;
+    for (const sourceAndTarget of sourcesAndTargets) {
+        if (!sourceAndTarget || !sourceAndTarget.target) {
+            console.log("Skipping invalid sourceAndTarget:", sourceAndTarget);
+            continue;
         }
+        sourceAndTarget.target.transcription.forEach((phoneme, index) => {
+            const prev = dataProcessed[phoneme] || initialCase;
+            const isCorrect = sourceAndTarget.target.hits[index];
+            const delta = {
+                correct: isCorrect ? 1 : 0,
+                wrong: isCorrect ? 0 : 1,
+                occurrences: [sourceAndTarget.target.word],
+            };
+            const total =
+                prev.correct + delta.correct + prev.wrong + delta.wrong;
+            const updated = {
+                correct: prev.correct + delta.correct,
+                wrong: prev.wrong + delta.wrong,
+                percentage:
+                    total > 0 ? (prev.correct + delta.correct) / total : 1,
+                occurrences: Array.from(
+                    new Set([...prev.occurrences, ...delta.occurrences])
+                ),
+            };
+            dataProcessed[phoneme] = updated;
+        });
     }
+
+    return dataProcessed;
 };
 
 router.post("/generate-report", (req, res) => {
@@ -84,10 +81,6 @@ router.post("/generate-report", (req, res) => {
     }
 
     // Process Data
-    console.log({
-        imitationSourcesAndTargets: Object.values(imitationSourcesAndTargets),
-        nomeationSourcesAndTargets: Object.values(nomeationSourcesAndTargets),
-    });
     const processedImitation = processPhonemes(
         Object.values(imitationSourcesAndTargets)
     );
@@ -95,10 +88,10 @@ router.post("/generate-report", (req, res) => {
         Object.values(nomeationSourcesAndTargets)
     );
 
-    const processedTotal = processPhonemes(
-        Object.values(imitationSourcesAndTargets) +
-            Object.values(nomeationSourcesAndTargets)
-    );
+    const processedTotal = processPhonemes([
+        ...Object.values(imitationSourcesAndTargets),
+        ...Object.values(nomeationSourcesAndTargets),
+    ]);
 
     const results = { processedImitation, processedNomeation, processedTotal };
 

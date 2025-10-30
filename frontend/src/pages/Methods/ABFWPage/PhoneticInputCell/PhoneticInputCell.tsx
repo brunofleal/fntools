@@ -29,6 +29,7 @@ const PhoneticInputCell = ({
             source: wordSource,
             target: {
                 transcription: wordAndTranscription.transcription,
+                word: wordAndTranscription.word,
                 hits: newHits,
             },
         };

@@ -1,0 +1,60 @@
+import { Box, Grid, HStack, Text } from "@chakra-ui/react";
+
+interface Props {
+    totalCorrect: number;
+    totalWrong: number;
+    percentage: number;
+}
+
+const TotalRow = ({ totalCorrect, totalWrong, percentage }: Props) => {
+    const getBackgroundColor = (percentage: number) => {
+        const percentValue = percentage * 100;
+        if (percentValue === 100) return "green.300";
+        if (percentValue >= 85) return "yellow.300";
+        if (percentValue >= 65) return "orange.300";
+        if (percentValue >= 50) return "orange.500";
+        return "red.500";
+    };
+
+    return (
+        <Grid
+            templateColumns="auto 1fr auto"
+            border="1px solid"
+            borderColor="gray.300"
+            bg="gray.200"
+            width="350px"
+            fontWeight="bold"
+        >
+            <Box
+                p={2}
+                borderRight="1px solid"
+                borderColor="gray.300"
+                textAlign="center"
+                width="100px"
+            >
+                TOTAL
+            </Box>
+            <Box
+                p={2}
+                borderRight="1px solid"
+                borderColor="gray.300"
+                width="150px"
+            ></Box>
+            <Box
+                p={2}
+                textAlign="center"
+                bg={getBackgroundColor(percentage)}
+                width="100px"
+            >
+                <HStack bgColor="white">
+                    <Text color="green.500">{totalCorrect}</Text>
+                    <Text>/</Text>
+                    <Text color="red.500">{totalWrong}</Text>
+                </HStack>
+                <Text>{(percentage * 100).toFixed(0)}%</Text>
+            </Box>
+        </Grid>
+    );
+};
+
+export default TotalRow;

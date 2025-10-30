@@ -4,6 +4,7 @@ export interface WordAndTranscription {
 }
 
 interface WordTarget {
+    word: string;
     transcription: string[];
     hits: boolean[];
 }

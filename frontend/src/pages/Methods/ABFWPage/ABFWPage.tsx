@@ -7,6 +7,7 @@ import {
     Heading,
     HStack,
     Input,
+    Text,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import Instructions from "./Instructions";
@@ -16,6 +17,8 @@ import { SourceAndTarget } from "../../../interfaces/word";
 import { BsFileEarmarkText } from "react-icons/bs";
 import { axiosApi } from "../../../shared/axiosApi";
 import { toast, ToastContainer } from "react-toastify";
+import { ABFWReportI } from "../../../interfaces/abfw";
+import ABFWReport from "./ABFWReport/ABFWReport";
 
 const ABFWPage = () => {
     const [imitationSourcesAndTargets, setImitationSourcesAndTargets] =
@@ -25,8 +28,9 @@ const ABFWPage = () => {
     const [name, setName] = useState("");
     const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
     const [age, setAge] = useState("");
-    const [reportResponse, setReportResponse] = useState();
+
     const [isLoading, setIsLoading] = useState(false);
+    const [reportResponse, setReportResponse] = useState<ABFWReportI>();
 
     const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -188,6 +192,17 @@ const ABFWPage = () => {
                 <BsFileEarmarkText />
                 Gerar Relatório
             </Button>
+            {reportResponse ? (
+                <Box>
+                    <Text fontSize="3xl">Relatório ABFW</Text>
+                    <ABFWReport
+                        info={{ age, date, name }}
+                        data={reportResponse.data}
+                    />
+                </Box>
+            ) : (
+                <></>
+            )}
         </Box>
     );
 };
