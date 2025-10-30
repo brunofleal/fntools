@@ -18,11 +18,10 @@ const TotalRow = ({ totalCorrect, totalWrong, percentage }: Props) => {
 
     return (
         <Grid
-            templateColumns="auto 1fr auto"
+            templateColumns="100px 200px 200px 100px"
             border="1px solid"
             borderColor="gray.300"
             bg="gray.200"
-            width="350px"
             fontWeight="bold"
         >
             <Box
@@ -30,23 +29,13 @@ const TotalRow = ({ totalCorrect, totalWrong, percentage }: Props) => {
                 borderRight="1px solid"
                 borderColor="gray.300"
                 textAlign="center"
-                width="100px"
             >
                 TOTAL
             </Box>
-            <Box
-                p={2}
-                borderRight="1px solid"
-                borderColor="gray.300"
-                width="150px"
-            ></Box>
-            <Box
-                p={2}
-                textAlign="center"
-                bg={getBackgroundColor(percentage)}
-                width="100px"
-            >
-                <HStack bgColor="white">
+            <Box p={2} borderRight="1px solid" borderColor="gray.300"></Box>
+            <Box p={2} borderRight="1px solid" borderColor="gray.300"></Box>
+            <Box p={2} textAlign="center" bg={getBackgroundColor(percentage)}>
+                <HStack>
                     <Text color="green.500">{totalCorrect}</Text>
                     <Text>/</Text>
                     <Text color="red.500">{totalWrong}</Text>

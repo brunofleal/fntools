@@ -3,6 +3,7 @@ export interface PhonemeData {
     wrong: number;
     percentage: number;
     occurrences: string[];
+    wordOccurrences: string[];
 }
 
 export interface ProcessedPhonemes {

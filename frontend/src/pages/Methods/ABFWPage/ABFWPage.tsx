@@ -83,6 +83,22 @@ const ABFWPage = () => {
 
     const isSubmitEnabled = name && age && date;
 
+    const getWordToTranscriptionMap = () => {
+        const wordToTranscriptionMap: { [key: string]: string[] } = {};
+
+        // Add imitation words
+        wordsImitation.forEach((word) => {
+            wordToTranscriptionMap[word.word] = word.transcription;
+        });
+
+        // Add nomeation words
+        wordsNomeation.forEach((word) => {
+            wordToTranscriptionMap[word.word] = word.transcription;
+        });
+
+        return wordToTranscriptionMap;
+    };
+
     return (
         <Box p={4} maxHeight="86vh" overflowY="auto">
             <ToastContainer />
@@ -198,6 +214,7 @@ const ABFWPage = () => {
                     <ABFWReport
                         info={{ age, date, name }}
                         data={reportResponse.data}
+                        wordToTranscriptionMap={getWordToTranscriptionMap()}
                     />
                 </Box>
             ) : (

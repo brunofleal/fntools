@@ -5,8 +5,14 @@ interface Props {
     phonem: string;
     phonemData: PhonemeData;
     index: number;
+    wordToTranscriptionMap: { [key: string]: string[] };
 }
-const PhonemReportCell = ({ phonem, phonemData, index }: Props) => {
+const PhonemReportCell = ({
+    phonem,
+    phonemData,
+    index,
+    wordToTranscriptionMap,
+}: Props) => {
     if (!phonemData) {
         return null;
     }
@@ -24,11 +30,10 @@ const PhonemReportCell = ({ phonem, phonemData, index }: Props) => {
 
     return (
         <Grid
-            templateColumns="auto 1fr auto"
+            templateColumns="100px 200px 200px 100px"
             border="1px solid"
             borderColor="gray.300"
             bg={index % 2 === 0 ? "white" : "gray.100"}
-            width="350px"
         >
             <Box
                 p={2}
@@ -36,7 +41,6 @@ const PhonemReportCell = ({ phonem, phonemData, index }: Props) => {
                 borderColor="gray.300"
                 fontWeight="bold"
                 textAlign="center"
-                width={"100px"}
             >
                 {phonem}
             </Box>
@@ -46,11 +50,22 @@ const PhonemReportCell = ({ phonem, phonemData, index }: Props) => {
                 p={2}
                 borderRight="1px solid"
                 borderColor="gray.300"
-                width={"150px"}
             >
                 {occurrences.map((occurrence, idx) => (
                     <Box key={idx} fontSize="sm">
                         {occurrence}
+                    </Box>
+                ))}
+            </VStack>
+            <VStack
+                align="start"
+                p={2}
+                borderRight="1px solid"
+                borderColor="gray.300"
+            >
+                {occurrences.map((occurrence, idx) => (
+                    <Box key={idx} fontSize="sm">
+                        {wordToTranscriptionMap[occurrence]?.join("")}
                     </Box>
                 ))}
             </VStack>
@@ -59,7 +74,6 @@ const PhonemReportCell = ({ phonem, phonemData, index }: Props) => {
                 fontWeight="bold"
                 textAlign="center"
                 bg={getBackgroundColor(percentage)}
-                width={"100px"}
             >
                 <HStack p={1} bgColor="white" borderRadius="5%">
                     <Text color="green.500">{correct}</Text>

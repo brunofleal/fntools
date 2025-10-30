@@ -17,10 +17,12 @@ import HeaderReportRow from "./HeaderReportRow";
 interface Props {
     info: { age: string; name: string; date: string };
     data: ABFWReportData;
+    wordToTranscriptionMap: { [key: string]: string[] };
 }
 const ABFWReport = ({
     info,
     data: { processedImitation, processedNomeation, processedTotal },
+    wordToTranscriptionMap,
 }: Props) => {
     const calculateTotals = (processedData: any) => {
         let totalCorrect = 0;
@@ -80,8 +82,11 @@ const ABFWReport = ({
                     </HStack>
                 </Box>
             </VStack>
-            <Flex gap={4} direction={{ base: "column", lg: "row" }}>
-                <Box flex={1}>
+            <Grid
+                templateColumns={{ base: "1fr", xl: "repeat(2, 1fr)" }}
+                gap={4}
+            >
+                <Box>
                     <Heading
                         size="md"
                         bg="blue.600"
@@ -102,6 +107,9 @@ const ABFWReport = ({
                                     phonem={phonem}
                                     phonemData={processedImitation[phonem]}
                                     index={index}
+                                    wordToTranscriptionMap={
+                                        wordToTranscriptionMap
+                                    }
                                 />
                             );
                         })}
@@ -113,7 +121,7 @@ const ABFWReport = ({
                     </Grid>
                 </Box>
 
-                <Box flex={1}>
+                <Box>
                     <Heading
                         size="md"
                         bg="purple.600"
@@ -134,6 +142,9 @@ const ABFWReport = ({
                                     phonem={phonem}
                                     phonemData={processedNomeation[phonem]}
                                     index={index}
+                                    wordToTranscriptionMap={
+                                        wordToTranscriptionMap
+                                    }
                                 />
                             );
                         })}
@@ -145,7 +156,7 @@ const ABFWReport = ({
                     </Grid>
                 </Box>
 
-                <Box flex={1}>
+                <Box>
                     <Heading
                         size="md"
                         bg="green.600"
@@ -166,6 +177,9 @@ const ABFWReport = ({
                                     phonem={phonem}
                                     phonemData={processedTotal[phonem]}
                                     index={index}
+                                    wordToTranscriptionMap={
+                                        wordToTranscriptionMap
+                                    }
                                 />
                             );
                         })}
@@ -176,7 +190,7 @@ const ABFWReport = ({
                         />
                     </Grid>
                 </Box>
-            </Flex>
+            </Grid>
         </Box>
     );
 };
