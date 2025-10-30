@@ -210,7 +210,6 @@ const ABFWPage = () => {
             </Button>
             {reportResponse ? (
                 <Box>
-                    <Text fontSize="3xl">Relatório ABFW</Text>
                     <ABFWReport
                         info={{ age, date, name }}
                         data={reportResponse.data}
