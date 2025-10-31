@@ -3,7 +3,7 @@
 ## Quick Start
 
 ```bash
-# From the project root directory (edurod/)
+# From the project root directory
 # Start MongoDB
 docker-compose up -d
 

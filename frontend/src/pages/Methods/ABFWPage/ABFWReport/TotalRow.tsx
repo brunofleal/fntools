@@ -35,10 +35,10 @@ const TotalRow = ({ totalCorrect, totalWrong, percentage }: Props) => {
             <Box p={2} borderRight="1px solid" borderColor="gray.300"></Box>
             <Box p={2} borderRight="1px solid" borderColor="gray.300"></Box>
             <Box p={2} textAlign="center" bg={getBackgroundColor(percentage)}>
-                <HStack>
+                <HStack bgColor="white">
                     <Text color="green.500">{totalCorrect}</Text>
                     <Text>/</Text>
-                    <Text color="red.500">{totalWrong}</Text>
+                    <Text>{totalCorrect + totalWrong}</Text>
                 </HStack>
                 <Text>{(percentage * 100).toFixed(0)}%</Text>
             </Box>

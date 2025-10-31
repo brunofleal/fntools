@@ -74,11 +74,6 @@ const PhonemReportCell = ({
                 textAlign="center"
                 bg={getBackgroundColor(percentage)}
             >
-                <HStack p={1} bgColor="white" borderRadius="5%">
-                    <Text color="green.500">{correct}</Text>
-                    <Text>/</Text>
-                    <Text color="red.500">{wrong}</Text>
-                </HStack>
                 <Text>{(percentage * 100).toFixed(0)}%</Text>
             </Box>
         </Grid>
