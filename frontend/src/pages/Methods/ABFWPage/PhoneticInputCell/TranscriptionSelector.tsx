@@ -45,27 +45,29 @@ const TranscriptionSelector = ({
 
     return (
         <Flex gap={1} wrap="wrap">
-            {sourceAndTarget.target.transcription.map((phoneme, idx) => (
-                <Badge
-                    key={idx}
-                    onClick={() => toggleHit(idx)}
-                    bg={
-                        sourceAndTarget.target.hits[idx]
-                            ? "green.600"
-                            : "red.600"
-                    }
-                    color="white"
-                    cursor="pointer"
-                    px={2}
-                    py={1}
-                    borderRadius="md"
-                    fontSize="sm"
-                    size="md"
-                    _hover={{ opacity: 0.8 }}
-                >
-                    {phoneme}
-                </Badge>
-            ))}
+            {Array.from(sourceAndTarget.target.transcriptionWithoutMarkers).map(
+                (phoneme, idx) => (
+                    <Badge
+                        key={idx}
+                        onClick={() => toggleHit(idx)}
+                        bg={
+                            sourceAndTarget.target.hits[idx]
+                                ? "green.600"
+                                : "red.600"
+                        }
+                        color="white"
+                        cursor="pointer"
+                        px={2}
+                        py={1}
+                        borderRadius="md"
+                        fontSize="sm"
+                        size="md"
+                        _hover={{ opacity: 0.8 }}
+                    >
+                        {phoneme}
+                    </Badge>
+                )
+            )}
         </Flex>
     );
 };

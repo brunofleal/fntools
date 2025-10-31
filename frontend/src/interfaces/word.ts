@@ -1,11 +1,12 @@
 export interface WordAndTranscription {
     word: string;
-    transcription: string[];
+    transcription: string;
 }
 
 interface WordTarget {
     word: string;
-    transcription: string[];
+    transcription: string;
+    transcriptionWithoutMarkers: string;
     hits: boolean[];
 }
 

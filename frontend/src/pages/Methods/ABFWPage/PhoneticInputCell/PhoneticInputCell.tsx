@@ -23,12 +23,15 @@ const PhoneticInputCell = ({
 }: Props) => {
     const [wordSource, setWordSource] = useState("");
     const [hits, setHits] = useState<boolean[]>([]);
+    const transcriptionWithoutMarkers =
+        wordAndTranscription.transcription.replace(/[ˈ.]/g, "");
 
     const updateSourcesAndTargets = (newHits: boolean[]) => {
         const sourceAndTarget: SourceAndTarget = {
             source: wordSource,
             target: {
                 transcription: wordAndTranscription.transcription,
+                transcriptionWithoutMarkers,
                 word: wordAndTranscription.word,
                 hits: newHits,
             },
@@ -44,7 +47,7 @@ const PhoneticInputCell = ({
 
     useEffect(() => {
         const initHits: boolean[] = Array(
-            wordAndTranscription.transcription.length
+            transcriptionWithoutMarkers.length
         ).fill(true);
         setHits(initHits);
         updateSourcesAndTargets(initHits);

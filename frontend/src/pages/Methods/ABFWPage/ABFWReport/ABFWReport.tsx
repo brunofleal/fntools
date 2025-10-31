@@ -12,7 +12,7 @@ import { MdDownload } from "react-icons/md";
 import html2canvas from "html2canvas";
 import { toast } from "react-toastify";
 import { ABFWReportData } from "../../../../interfaces/abfw";
-import { phonems } from "../words";
+import { phonemes } from "../words";
 import PhonemReportCell from "./PhonemReportCell";
 import TotalRow from "./TotalRow";
 import HeaderReportRow from "./HeaderReportRow";
@@ -20,7 +20,7 @@ import HeaderReportRow from "./HeaderReportRow";
 interface Props {
     info: { age: string; name: string; date: string };
     data: ABFWReportData;
-    wordToTranscriptionMap: { [key: string]: string[] };
+    wordToTranscriptionMap: { [key: string]: string };
 }
 const ABFWReport = ({
     info,
@@ -160,7 +160,7 @@ const ABFWReport = ({
                         </Heading>
                         <Grid templateColumns="1fr" width="100%">
                             <HeaderReportRow />
-                            {phonems.map((phonem, index) => {
+                            {phonemes.map((phonem, index) => {
                                 return (
                                     <PhonemReportCell
                                         key={phonem + "1"}
@@ -195,7 +195,7 @@ const ABFWReport = ({
                         </Heading>
                         <Grid templateColumns="1fr" width="100%">
                             <HeaderReportRow />
-                            {phonems.map((phonem, index) => {
+                            {phonemes.map((phonem, index) => {
                                 return (
                                     <PhonemReportCell
                                         key={phonem + "2"}
@@ -230,7 +230,7 @@ const ABFWReport = ({
                         </Heading>
                         <Grid templateColumns="1fr" width="100%">
                             <HeaderReportRow />
-                            {phonems.map((phonem, index) => {
+                            {phonemes.map((phonem, index) => {
                                 return (
                                     <PhonemReportCell
                                         key={phonem + "3"}

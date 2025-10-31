@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import Instructions from "./Instructions";
-import { wordsImitation, wordsNomeation } from "./words";
+import { phonemes, wordsImitation, wordsNomeation } from "./words";
 import PhoneticInputCell from "./PhoneticInputCell/PhoneticInputCell";
 import { SourceAndTarget } from "../../../interfaces/word";
 import { BsFileEarmarkText } from "react-icons/bs";
@@ -48,6 +48,7 @@ const ABFWPage = () => {
                 age: parseInt(age),
                 imitationSourcesAndTargets,
                 nomeationSourcesAndTargets,
+                phonemesRequested: phonemes,
             };
 
             const response = await axiosApi.post(
@@ -84,7 +85,7 @@ const ABFWPage = () => {
     const isSubmitEnabled = name && age && date;
 
     const getWordToTranscriptionMap = () => {
-        const wordToTranscriptionMap: { [key: string]: string[] } = {};
+        const wordToTranscriptionMap: { [key: string]: string } = {};
 
         // Add imitation words
         wordsImitation.forEach((word) => {

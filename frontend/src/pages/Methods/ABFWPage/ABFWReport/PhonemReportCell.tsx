@@ -5,7 +5,7 @@ interface Props {
     phonem: string;
     phonemData: PhonemeData;
     index: number;
-    wordToTranscriptionMap: { [key: string]: string[] };
+    wordToTranscriptionMap: { [key: string]: string };
 }
 const PhonemReportCell = ({
     phonem,
@@ -64,7 +64,7 @@ const PhonemReportCell = ({
             >
                 {occurrences.map((occurrence, idx) => (
                     <Box key={idx} fontSize="sm">
-                        {wordToTranscriptionMap[occurrence]?.join("")}
+                        {wordToTranscriptionMap[occurrence]}
                     </Box>
                 ))}
             </VStack>
