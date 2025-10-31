@@ -22,7 +22,7 @@ const MethodsPage = () => {
                 >
                     <Box p={6}>
                         <Heading size="md" mb={2}>
-                            {method.label.toUpperCase()} Method
+                            {method.label.toUpperCase()}
                         </Heading>
                         <Text>{method.description}</Text>
                     </Box>

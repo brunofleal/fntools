@@ -46,7 +46,6 @@ const PhonemReportCell = ({
             </Box>
             <VStack
                 align="start"
-                gap={1}
                 p={2}
                 borderRight="1px solid"
                 borderColor="gray.300"
