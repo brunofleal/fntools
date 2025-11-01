@@ -92,17 +92,26 @@ const ABFWReport = ({
     };
 
     return (
-        <Box p={6}>
-            <Button
-                colorScheme="blue"
-                onClick={handleDownloadReport}
-                mb={4}
-                loading={isDownloading}
-                disabled={isDownloading}
-            >
-                <MdDownload style={{ marginRight: "8px" }} />
-                {isDownloading ? "Baixando..." : "Baixar Relatório"}
-            </Button>
+        <Box p={2}>
+            <Box display="flex" justifyContent="flex-end" mb={4}>
+                <Button
+                    bgColor="purple.600"
+                    size="lg"
+                    onClick={handleDownloadReport}
+                    loading={isDownloading}
+                    disabled={isDownloading}
+                    _hover={{
+                        transform: "translateY(4px)",
+                        boxShadow: "lg",
+                        bgColor: "purple.400",
+                    }}
+                    transition="all 0.2s"
+                    fontWeight="bold"
+                >
+                    <MdDownload style={{ marginRight: "8px" }} />
+                    {isDownloading ? "Baixando..." : "Baixar Relatório"}
+                </Button>
+            </Box>
             <Box
                 border="8px double"
                 borderColor="blue.500"

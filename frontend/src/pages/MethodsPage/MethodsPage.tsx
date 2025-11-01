@@ -5,7 +5,12 @@ import { useNavigate } from "react-router";
 const MethodsPage = () => {
     const navigate = useNavigate();
     const methodsAvailable = [
-        { label: "ABFW", description: "description", to: "/methods/abfw" },
+        {
+            label: "Teste de linguagem infantil ABFW",
+            description:
+                "Avaliação fonológica da criança que analisa o inventário fonético e o sistema fonológico através de provas de imitação e nomeação. Identifica processos fonológicos, calcula o PCC (Percentagem de Consoantes Corretas) e classifica o grau de severidade do transtorno fonológico.",
+            to: "/methods/abfw",
+        },
     ];
     return (
         <Flex>

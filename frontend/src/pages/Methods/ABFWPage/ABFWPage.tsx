@@ -19,6 +19,9 @@ import { axiosApi } from "../../../shared/axiosApi";
 import { toast, ToastContainer } from "react-toastify";
 import { ABFWReportI } from "../../../interfaces/abfw";
 import ABFWReport from "./ABFWReport/ABFWReport";
+import { useNavigate } from "react-router";
+import { getTodayDate } from "../../../shared/utils/formatDate";
+import { ConfirmDialog } from "../../../components/ConfirmDialog/ConfirmDialog";
 
 const ABFWPage = () => {
     const [imitationSourcesAndTargets, setImitationSourcesAndTargets] =
@@ -26,7 +29,9 @@ const ABFWPage = () => {
     const [nomeationSourcesAndTargets, setNomeationSourcesAndTargets] =
         useState<{ [key: number]: SourceAndTarget }>({});
     const [name, setName] = useState("");
-    const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+
+    const todayDate = getTodayDate();
+    const [date, setDate] = useState(todayDate);
     const [age, setAge] = useState("");
 
     const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +39,8 @@ const ABFWPage = () => {
 
     const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        if (value === "" || parseInt(value) > 0) {
+        // Only allow numbers and empty string
+        if (value === "" || (/^\d+$/.test(value) && parseInt(value) > 0)) {
             setAge(value);
         }
     };
@@ -101,21 +107,35 @@ const ABFWPage = () => {
     };
 
     return (
-        <Box p={4} maxHeight="86vh" overflowY="auto">
+        <Box p={2} maxHeight="86vh" overflowY="auto">
             <ToastContainer />
             <Instructions />
-            <HStack gap={4} mb={4}>
+            <HStack gap={2} mb={2}>
                 <Box>
-                    <label htmlFor="name">Nome</label>
+                    <label htmlFor="name">
+                        Nome{" "}
+                        <Text as="span" color="red.500">
+                            *
+                        </Text>
+                    </label>
                     <Input
                         id="name"
                         placeholder="Nome"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
+                        borderColor={name ? "inherit" : "red.500"}
+                        _focus={{
+                            borderColor: name ? "blue.500" : "red.500",
+                        }}
                     />
                 </Box>
                 <Box>
-                    <label htmlFor="age">Idade</label>
+                    <label htmlFor="age">
+                        Idade{" "}
+                        <Text as="span" color="red.500">
+                            *
+                        </Text>
+                    </label>
                     <Input
                         id="age"
                         type="number"
@@ -123,16 +143,35 @@ const ABFWPage = () => {
                         value={age}
                         onChange={handleAgeChange}
                         min={1}
+                        borderColor={age ? "inherit" : "red.500"}
+                        _focus={{
+                            borderColor: age ? "blue.500" : "red.500",
+                        }}
                     />
                 </Box>
                 <Box>
-                    <label htmlFor="date">Data</label>
+                    <label htmlFor="date">
+                        Data{" "}
+                        <Text as="span" color="red.500">
+                            *
+                        </Text>
+                    </label>
                     <Input
                         id="date"
                         type="date"
                         value={date}
+                        max={todayDate}
                         onChange={(e) => setDate(e.target.value)}
+                        borderColor={date ? "inherit" : "red.500"}
+                        _focus={{
+                            borderColor: date ? "blue.500" : "red.500",
+                        }}
                     />
+                    {!date && (
+                        <Text fontSize="xs" color="red.500" mt={1}>
+                            Campo obrigatório
+                        </Text>
+                    )}
                 </Box>
             </HStack>
             <HStack>
@@ -200,15 +239,35 @@ const ABFWPage = () => {
                     );
                 })}
             </Grid>
-            <Button
-                size="lg"
-                onClick={handleSubmitData}
-                loading={isLoading}
-                disabled={!isSubmitEnabled}
-            >
-                <BsFileEarmarkText />
-                Gerar Relatório
-            </Button>
+            <HStack justify="space-between" mb={4}>
+                <Button
+                    size="lg"
+                    onClick={handleSubmitData}
+                    loading={isLoading}
+                    disabled={!isSubmitEnabled}
+                    colorScheme="blue"
+                >
+                    <BsFileEarmarkText style={{ marginRight: "8px" }} />
+                    {reportResponse ? "Regerar Relatório" : "Gerar Relatório"}
+                </Button>
+                {reportResponse && (
+                    <ConfirmDialog
+                        openButton={{
+                            label: "Limpar e Recomeçar",
+                            type: "delete",
+                        }}
+                        title="Confirmar Limpeza"
+                        description="Tem certeza que deseja limpar todos os dados e recomeçar? Esta ação não pode ser desfeita."
+                        saveLabel="Confirmar"
+                        onConfirm={() => {
+                            window.scrollTo({ top: 0, behavior: "smooth" });
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 300);
+                        }}
+                    />
+                )}
+            </HStack>
             {reportResponse ? (
                 <Box>
                     <ABFWReport
