@@ -10,7 +10,7 @@ import {
     Text,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import Instructions from "./Instructions";
+import Instructions from "./Instructions/Instructions";
 import { phonemes, wordsImitation, wordsNomeation } from "./words";
 import PhoneticInputCell from "./PhoneticInputCell/PhoneticInputCell";
 import { SourceAndTarget } from "../../../interfaces/word";
@@ -40,7 +40,12 @@ const ABFWPage = () => {
     const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         // Only allow numbers and empty string
-        if (value === "" || (/^\d+$/.test(value) && parseInt(value) > 0)) {
+        if (
+            value === "" ||
+            (/^\d+$/.test(value) &&
+                parseInt(value) > 0 &&
+                parseInt(value) < 100)
+        ) {
             setAge(value);
         }
     };
@@ -143,6 +148,7 @@ const ABFWPage = () => {
                         value={age}
                         onChange={handleAgeChange}
                         min={1}
+                        max={99}
                         borderColor={age ? "inherit" : "red.500"}
                         _focus={{
                             borderColor: age ? "blue.500" : "red.500",
@@ -167,117 +173,125 @@ const ABFWPage = () => {
                             borderColor: date ? "blue.500" : "red.500",
                         }}
                     />
-                    {!date && (
-                        <Text fontSize="xs" color="red.500" mt={1}>
-                            Campo obrigatório
-                        </Text>
+                </Box>
+            </HStack>
+            {name && age && (
+                <Box>
+                    <HStack>
+                        <Heading fontSize="5xl">Prova de Imitação</Heading>
+                    </HStack>
+                    <Grid
+                        bg="blue.50"
+                        border="1px"
+                        borderColor="blue.200"
+                        borderRadius="md"
+                        p={4}
+                        mb={4}
+                        templateColumns={{
+                            base: "repeat(1, 1fr)",
+                            md: "repeat(2, 1fr)",
+                            xl: "repeat(3, 1fr)",
+                        }}
+                        gap={4}
+                    >
+                        {wordsImitation.map((word, index) => {
+                            return (
+                                <GridItem key={word.word}>
+                                    <PhoneticInputCell
+                                        index={index}
+                                        wordAndTranscription={word}
+                                        setSourcesAndTargets={
+                                            setImitationSourcesAndTargets
+                                        }
+                                        sourcesAndTargets={
+                                            imitationSourcesAndTargets
+                                        }
+                                    />
+                                </GridItem>
+                            );
+                        })}
+                    </Grid>
+                    <Box height="1px" bg="gray.300" my={6} width="100%" />
+                    <HStack>
+                        <Heading fontSize="5xl">Prova de Nomeação</Heading>
+                    </HStack>
+                    <Grid
+                        bg="blue.50"
+                        border="1px"
+                        borderColor="blue.200"
+                        borderRadius="md"
+                        p={4}
+                        mb={4}
+                        templateColumns={{
+                            base: "repeat(1, 1fr)",
+                            md: "repeat(2, 1fr)",
+                            xl: "repeat(3, 1fr)",
+                        }}
+                        gap={4}
+                    >
+                        {wordsNomeation.map((word, index) => {
+                            return (
+                                <GridItem key={word.word}>
+                                    <PhoneticInputCell
+                                        index={index}
+                                        wordAndTranscription={word}
+                                        setSourcesAndTargets={
+                                            setNomeationSourcesAndTargets
+                                        }
+                                        sourcesAndTargets={
+                                            nomeationSourcesAndTargets
+                                        }
+                                    />
+                                </GridItem>
+                            );
+                        })}
+                    </Grid>
+                    <HStack justify="space-between" mb={4}>
+                        <Button
+                            size="lg"
+                            onClick={handleSubmitData}
+                            loading={isLoading}
+                            disabled={!isSubmitEnabled}
+                            colorScheme="blue"
+                        >
+                            <BsFileEarmarkText style={{ marginRight: "8px" }} />
+                            {reportResponse
+                                ? "Regerar Relatório"
+                                : "Gerar Relatório"}
+                        </Button>
+                        {reportResponse && (
+                            <ConfirmDialog
+                                openButton={{
+                                    label: "Limpar e Recomeçar",
+                                    type: "delete",
+                                }}
+                                title="Confirmar Limpeza"
+                                description="Tem certeza que deseja limpar todos os dados e recomeçar? Esta ação não pode ser desfeita."
+                                saveLabel="Confirmar"
+                                onConfirm={() => {
+                                    window.scrollTo({
+                                        top: 0,
+                                        behavior: "smooth",
+                                    });
+                                    setTimeout(() => {
+                                        window.location.reload();
+                                    }, 300);
+                                }}
+                            />
+                        )}
+                    </HStack>
+                    {reportResponse ? (
+                        <Box>
+                            <ABFWReport
+                                info={{ age, date, name }}
+                                data={reportResponse.data}
+                                wordToTranscriptionMap={getWordToTranscriptionMap()}
+                            />
+                        </Box>
+                    ) : (
+                        <></>
                     )}
                 </Box>
-            </HStack>
-            <HStack>
-                <Heading fontSize="5xl">Prova de Imitação</Heading>
-            </HStack>
-            <Grid
-                bg="blue.50"
-                border="1px"
-                borderColor="blue.200"
-                borderRadius="md"
-                p={4}
-                mb={4}
-                templateColumns={{
-                    base: "repeat(1, 1fr)",
-                    md: "repeat(2, 1fr)",
-                    xl: "repeat(3, 1fr)",
-                }}
-                gap={4}
-            >
-                {wordsImitation.map((word, index) => {
-                    return (
-                        <GridItem key={word.word}>
-                            <PhoneticInputCell
-                                index={index}
-                                wordAndTranscription={word}
-                                setSourcesAndTargets={
-                                    setImitationSourcesAndTargets
-                                }
-                                sourcesAndTargets={imitationSourcesAndTargets}
-                            />
-                        </GridItem>
-                    );
-                })}
-            </Grid>
-            <Box height="1px" bg="gray.300" my={6} width="100%" />
-            <HStack>
-                <Heading fontSize="5xl">Prova de Nomeação</Heading>
-            </HStack>
-            <Grid
-                bg="blue.50"
-                border="1px"
-                borderColor="blue.200"
-                borderRadius="md"
-                p={4}
-                mb={4}
-                templateColumns={{
-                    base: "repeat(1, 1fr)",
-                    md: "repeat(2, 1fr)",
-                    xl: "repeat(3, 1fr)",
-                }}
-                gap={4}
-            >
-                {wordsNomeation.map((word, index) => {
-                    return (
-                        <GridItem key={word.word}>
-                            <PhoneticInputCell
-                                index={index}
-                                wordAndTranscription={word}
-                                setSourcesAndTargets={
-                                    setNomeationSourcesAndTargets
-                                }
-                                sourcesAndTargets={nomeationSourcesAndTargets}
-                            />
-                        </GridItem>
-                    );
-                })}
-            </Grid>
-            <HStack justify="space-between" mb={4}>
-                <Button
-                    size="lg"
-                    onClick={handleSubmitData}
-                    loading={isLoading}
-                    disabled={!isSubmitEnabled}
-                    colorScheme="blue"
-                >
-                    <BsFileEarmarkText style={{ marginRight: "8px" }} />
-                    {reportResponse ? "Regerar Relatório" : "Gerar Relatório"}
-                </Button>
-                {reportResponse && (
-                    <ConfirmDialog
-                        openButton={{
-                            label: "Limpar e Recomeçar",
-                            type: "delete",
-                        }}
-                        title="Confirmar Limpeza"
-                        description="Tem certeza que deseja limpar todos os dados e recomeçar? Esta ação não pode ser desfeita."
-                        saveLabel="Confirmar"
-                        onConfirm={() => {
-                            window.scrollTo({ top: 0, behavior: "smooth" });
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 300);
-                        }}
-                    />
-                )}
-            </HStack>
-            {reportResponse ? (
-                <Box>
-                    <ABFWReport
-                        info={{ age, date, name }}
-                        data={reportResponse.data}
-                        wordToTranscriptionMap={getWordToTranscriptionMap()}
-                    />
-                </Box>
-            ) : (
-                <></>
             )}
         </Box>
     );
