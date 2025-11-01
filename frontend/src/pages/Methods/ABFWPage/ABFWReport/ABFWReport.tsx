@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { MdDownload } from "react-icons/md";
+import { BsChevronDown, BsChevronUp } from "react-icons/bs";
 import html2canvas from "html2canvas";
 import { toast } from "react-toastify";
 import { ABFWReportData } from "../../../../interfaces/abfw";
@@ -29,6 +30,25 @@ const ABFWReport = ({
 }: Props) => {
     const reportRef = useRef<HTMLDivElement>(null);
     const [isDownloading, setIsDownloading] = useState(false);
+    const [expandedStates, setExpandedStates] = useState<{
+        [key: string]: boolean;
+    }>({});
+
+    const toggleAllExpanded = () => {
+        const allExpanded = Object.values(expandedStates).every(
+            (val) => val !== false
+        );
+        const newState: { [key: string]: boolean } = {};
+
+        // Set all phoneme states
+        phonemes.forEach((phonem) => {
+            newState[`imitation-${phonem}`] = !allExpanded;
+            newState[`nomeation-${phonem}`] = !allExpanded;
+            newState[`total-${phonem}`] = !allExpanded;
+        });
+
+        setExpandedStates(newState);
+    };
 
     const calculateTotals = (processedData: any) => {
         let totalCorrect = 0;
@@ -93,9 +113,37 @@ const ABFWReport = ({
 
     return (
         <Box p={{ base: 1, md: 2 }}>
-            <Box display="flex" justifyContent="flex-end" mb={4}>
+            <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                mb={4}
+                gap={2}
+            >
                 <Button
+                    size={{ base: "sm", md: "md" }}
+                    onClick={toggleAllExpanded}
+                    color="white"
                     bgColor="purple.600"
+                    variant="solid"
+                    fontSize={{ base: "xs", md: "sm" }}
+                >
+                    {Object.values(expandedStates).every(
+                        (val) => val !== false
+                    ) ? (
+                        <>
+                            <BsChevronUp style={{ marginRight: "4px" }} />
+                            Ocultar Todos
+                        </>
+                    ) : (
+                        <>
+                            <BsChevronDown style={{ marginRight: "4px" }} />
+                            Mostrar Todos
+                        </>
+                    )}
+                </Button>
+                <Button
+                    bgColor="black"
                     size={{ base: "md", md: "lg" }}
                     onClick={handleDownloadReport}
                     loading={isDownloading}
@@ -217,6 +265,7 @@ const ABFWReport = ({
                             <Grid templateColumns="1fr" width="100%">
                                 <HeaderReportRow />
                                 {phonemes.map((phonem, index) => {
+                                    const key = `imitation-${phonem}`;
                                     return (
                                         <PhonemReportCell
                                             key={phonem + "1"}
@@ -228,6 +277,15 @@ const ABFWReport = ({
                                             wordToTranscriptionMap={
                                                 wordToTranscriptionMap
                                             }
+                                            expanded={
+                                                expandedStates[key] ?? true
+                                            }
+                                            setExpanded={(value) => {
+                                                setExpandedStates((prev) => ({
+                                                    ...prev,
+                                                    [key]: value,
+                                                }));
+                                            }}
                                         />
                                     );
                                 })}
@@ -255,6 +313,7 @@ const ABFWReport = ({
                             <Grid templateColumns="1fr" width="100%">
                                 <HeaderReportRow />
                                 {phonemes.map((phonem, index) => {
+                                    const key = `nomeation-${phonem}`;
                                     return (
                                         <PhonemReportCell
                                             key={phonem + "2"}
@@ -266,6 +325,15 @@ const ABFWReport = ({
                                             wordToTranscriptionMap={
                                                 wordToTranscriptionMap
                                             }
+                                            expanded={
+                                                expandedStates[key] ?? true
+                                            }
+                                            setExpanded={(value) => {
+                                                setExpandedStates((prev) => ({
+                                                    ...prev,
+                                                    [key]: value,
+                                                }));
+                                            }}
                                         />
                                     );
                                 })}
@@ -293,6 +361,7 @@ const ABFWReport = ({
                             <Grid templateColumns="1fr" width="100%">
                                 <HeaderReportRow />
                                 {phonemes.map((phonem, index) => {
+                                    const key = `total-${phonem}`;
                                     return (
                                         <PhonemReportCell
                                             key={phonem + "3"}
@@ -302,6 +371,15 @@ const ABFWReport = ({
                                             wordToTranscriptionMap={
                                                 wordToTranscriptionMap
                                             }
+                                            expanded={
+                                                expandedStates[key] ?? true
+                                            }
+                                            setExpanded={(value) => {
+                                                setExpandedStates((prev) => ({
+                                                    ...prev,
+                                                    [key]: value,
+                                                }));
+                                            }}
                                         />
                                     );
                                 })}

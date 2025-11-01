@@ -1,17 +1,53 @@
-import { Box, HStack, VStack, Grid, Text } from "@chakra-ui/react";
+import { Box, HStack, VStack, Grid, Text, Button } from "@chakra-ui/react";
 import { PhonemeData } from "../../../../interfaces/abfw";
+import { BsChevronDown, BsChevronUp } from "react-icons/bs";
+
+interface ToggleButtonProps {
+    expanded: boolean;
+    onToggle: () => void;
+}
+
+const ToggleButton = ({ expanded, onToggle }: ToggleButtonProps) => {
+    return (
+        <Button
+            size="2xs"
+            variant="solid"
+            bgColor="purple.600"
+            color="white"
+            onClick={onToggle}
+            fontSize={{ base: "2xs", sm: "xs" }}
+            mt={expanded ? 1 : 0}
+        >
+            {expanded ? (
+                <>
+                    <BsChevronUp style={{ marginRight: "4px" }} />
+                    Ocultar
+                </>
+            ) : (
+                <>
+                    <BsChevronDown style={{ marginRight: "4px" }} />
+                    Mostrar
+                </>
+            )}
+        </Button>
+    );
+};
 
 interface Props {
     phonem: string;
     phonemData: PhonemeData;
     index: number;
     wordToTranscriptionMap: { [key: string]: string };
+    expanded?: boolean;
+    setExpanded?: (expanded: boolean) => void;
 }
 const PhonemReportCell = ({
     phonem,
     phonemData,
     index,
     wordToTranscriptionMap,
+    expanded = true,
+    setExpanded,
 }: Props) => {
     if (!phonemData) {
         return null;
@@ -27,6 +63,8 @@ const PhonemReportCell = ({
         if (percentValue >= 50) return "orange.500"; // TRANSTORNO MODERADAMENTE SEVERO
         return "red.500"; // TRANSTORNO SEVERO
     };
+
+    const displayedOccurrences = expanded ? occurrences : [];
 
     return (
         <Grid
@@ -59,14 +97,19 @@ const PhonemReportCell = ({
                 borderRight="1px solid"
                 borderColor="gray.300"
             >
-                {occurrences.map((occurrence, idx) => (
-                    <Box
-                        key={idx}
-                        fontSize={{ base: "2xs", sm: "xs", md: "sm" }}
-                    >
-                        {occurrence}
-                    </Box>
-                ))}
+                {expanded &&
+                    displayedOccurrences.map((occurrence, idx) => (
+                        <Box
+                            key={idx}
+                            fontSize={{ base: "2xs", sm: "xs", md: "sm" }}
+                        >
+                            {occurrence}
+                        </Box>
+                    ))}
+                <ToggleButton
+                    expanded={expanded}
+                    onToggle={() => setExpanded?.(!expanded)}
+                />
             </VStack>
             <VStack
                 align="center"
@@ -75,14 +118,19 @@ const PhonemReportCell = ({
                 borderRight="1px solid"
                 borderColor="gray.300"
             >
-                {occurrences.map((occurrence, idx) => (
-                    <Box
-                        key={idx}
-                        fontSize={{ base: "2xs", sm: "xs", md: "sm" }}
-                    >
-                        {wordToTranscriptionMap[occurrence]}
-                    </Box>
-                ))}
+                {expanded &&
+                    displayedOccurrences.map((occurrence, idx) => (
+                        <Box
+                            key={idx}
+                            fontSize={{ base: "2xs", sm: "xs", md: "sm" }}
+                        >
+                            {wordToTranscriptionMap[occurrence]}
+                        </Box>
+                    ))}
+                <ToggleButton
+                    expanded={expanded}
+                    onToggle={() => setExpanded?.(!expanded)}
+                />
             </VStack>
             <Box
                 p={{ base: 0.5, sm: 1, md: 2 }}
