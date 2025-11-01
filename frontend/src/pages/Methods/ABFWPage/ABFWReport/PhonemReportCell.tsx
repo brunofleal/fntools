@@ -45,7 +45,8 @@ const PhonemReportCell = ({
                 {phonem}
             </Box>
             <VStack
-                align="start"
+                align="center"
+                justifyContent="center"
                 p={2}
                 borderRight="1px solid"
                 borderColor="gray.300"
@@ -57,7 +58,8 @@ const PhonemReportCell = ({
                 ))}
             </VStack>
             <VStack
-                align="start"
+                align="center"
+                justifyContent="center"
                 p={2}
                 borderRight="1px solid"
                 borderColor="gray.300"
@@ -72,6 +74,9 @@ const PhonemReportCell = ({
                 p={2}
                 fontWeight="bold"
                 textAlign="center"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
                 bg={getBackgroundColor(percentage)}
             >
                 <VStack gap={0}>
