@@ -3,7 +3,7 @@ import { Box, Grid } from "@chakra-ui/react";
 const HeaderReportRow = () => {
     return (
         <Grid
-            templateColumns="auto auto auto auto"
+            templateColumns="80px 1fr 1fr 120px"
             border="1px solid"
             borderColor="gray.300"
             bg="gray.700"

@@ -167,7 +167,11 @@ const ABFWReport = ({
                         </Box>
                     </VStack>
                     <Grid
-                        templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }}
+                        templateColumns={{
+                            base: "1fr",
+                            lg: "repeat(2, 1fr)",
+                            xl: "repeat(3, 1fr)",
+                        }}
                         gap={4}
                     >
                         <Box>

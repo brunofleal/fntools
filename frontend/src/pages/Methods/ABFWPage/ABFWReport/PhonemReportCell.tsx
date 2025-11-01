@@ -30,7 +30,7 @@ const PhonemReportCell = ({
 
     return (
         <Grid
-            templateColumns="auto auto auto auto"
+            templateColumns="80px 1fr 1fr 120px"
             border="1px solid"
             borderColor="gray.300"
             bg={index % 2 === 0 ? "white" : "gray.100"}
@@ -41,6 +41,10 @@ const PhonemReportCell = ({
                 borderColor="gray.300"
                 fontWeight="bold"
                 textAlign="center"
+                fontSize="2xl"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
             >
                 {phonem}
             </Box>
@@ -80,10 +84,11 @@ const PhonemReportCell = ({
                 bg={getBackgroundColor(percentage)}
             >
                 <VStack gap={0}>
-                    <Text>{(percentage * 100).toFixed(0)}%</Text>
-                    <Text fontSize="xs">
-                        ({correct}/{correct + wrong})
-                    </Text>
+                    <HStack gap={0}>
+                        <Text>{(percentage * 100).toFixed(0)}%(</Text>
+                        <Text color="green">{correct}</Text>
+                        <Text fontSize="md">/{correct + wrong})</Text>
+                    </HStack>
                 </VStack>
             </Box>
         </Grid>

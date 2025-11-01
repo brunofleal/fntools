@@ -16,9 +16,18 @@ const TotalRow = ({ totalCorrect, totalWrong, percentage }: Props) => {
         return "red.500";
     };
 
+    const getResultLabel = (percentage: number) => {
+        const percentValue = percentage * 100;
+        if (percentValue === 100) return "Adequado";
+        if (percentValue >= 85) return "Transtorno Leve";
+        if (percentValue >= 65) return "Transtorno Levemente Moderado";
+        if (percentValue >= 50) return "Transtorno Moderadamente Severo";
+        return "Transtorno Severo";
+    };
+
     return (
         <Grid
-            templateColumns="100px 200px 200px 100px"
+            templateColumns="80px 1fr 1fr 120px"
             border="1px solid"
             borderColor="gray.300"
             bg="gray.200"
@@ -35,12 +44,13 @@ const TotalRow = ({ totalCorrect, totalWrong, percentage }: Props) => {
             <Box p={2} borderRight="1px solid" borderColor="gray.300"></Box>
             <Box p={2} borderRight="1px solid" borderColor="gray.300"></Box>
             <Box p={2} textAlign="center" bg={getBackgroundColor(percentage)}>
-                <HStack bgColor="white">
+                <HStack bgColor="white" justifyContent="center">
                     <Text color="green.500">{totalCorrect}</Text>
                     <Text>/</Text>
                     <Text>{totalCorrect + totalWrong}</Text>
                 </HStack>
                 <Text>{(percentage * 100).toFixed(0)}%</Text>
+                <Text fontSize="xs">{getResultLabel(percentage)}</Text>
             </Box>
         </Grid>
     );
