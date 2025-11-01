@@ -44,34 +44,47 @@ const NavbarContent = () => {
     }, [location.pathname]);
 
     return (
-        <Box h="100vh">
+        <Box h="100vh" display="flex" flexDirection="column">
             <ToastContainer position="top-center" />
             <AuthChecker />
             <HStack
-                p={6}
+                p={{ base: 2, md: 4, lg: 6 }}
                 bgColor="gray.600"
-                w="100vw"
-                position="static"
+                w="100%"
                 justifyContent="space-between"
+                flexWrap={{ base: "wrap", lg: "nowrap" }}
+                gap={{ base: 2, md: 4 }}
             >
-                <HStack gap={20}>
+                <HStack gap={{ base: 4, md: 10, lg: 20 }} flexWrap="wrap">
                     <Box cursor="pointer" onClick={() => navigate("/")}>
                         <Logo />
                     </Box>
-                    <NavLink to="/methods" label="Metódos" />
+                    <NavLink to="/methods" label="Ferramentas" />
                     {canViewAdmin ? (
                         <NavLink to="/admin" label="Administração" />
                     ) : (
                         <></>
                     )}
                 </HStack>
-                <HStack justifySelf="flex-end" gap={4}>
-                    <HStack bgColor="white" borderRadius="md" p={1}>
-                        <Avatar.Root>
+                <HStack
+                    justifySelf="flex-end"
+                    gap={{ base: 2, md: 4 }}
+                    flexShrink={0}
+                >
+                    <HStack
+                        bgColor="white"
+                        borderRadius="md"
+                        p={1}
+                        display={{ base: "none", sm: "flex" }}
+                    >
+                        <Avatar.Root size={{ base: "xs", md: "sm" }}>
                             <Avatar.Image src="https://bit.ly/broken-link" />
                             <Avatar.Fallback />
                         </Avatar.Root>
-                        <Text>
+                        <Text
+                            fontSize={{ base: "sm", md: "md" }}
+                            display={{ base: "none", md: "block" }}
+                        >
                             {userInfo ? capitalizeName(userInfo.name) : ""}
                         </Text>
                     </HStack>
@@ -79,7 +92,7 @@ const NavbarContent = () => {
                     <NavbarMenu />
                 </HStack>
             </HStack>
-            <Box>
+            <Box flex="1" overflowY="auto">
                 <Outlet></Outlet>
             </Box>
         </Box>

@@ -92,11 +92,11 @@ const ABFWReport = ({
     };
 
     return (
-        <Box p={2}>
+        <Box p={{ base: 1, md: 2 }}>
             <Box display="flex" justifyContent="flex-end" mb={4}>
                 <Button
                     bgColor="purple.600"
-                    size="lg"
+                    size={{ base: "md", md: "lg" }}
                     onClick={handleDownloadReport}
                     loading={isDownloading}
                     disabled={isDownloading}
@@ -107,17 +107,18 @@ const ABFWReport = ({
                     }}
                     transition="all 0.2s"
                     fontWeight="bold"
+                    fontSize={{ base: "sm", md: "md" }}
                 >
                     <MdDownload style={{ marginRight: "8px" }} />
                     {isDownloading ? "Baixando..." : "Baixar Relatório"}
                 </Button>
             </Box>
             <Box
-                border="8px double"
+                border={{ base: "4px double", md: "8px double" }}
                 borderColor="blue.500"
                 borderRadius="lg"
                 bg="white"
-                p={2}
+                p={{ base: 1, md: 2 }}
             >
                 <Box
                     ref={reportRef}
@@ -125,10 +126,17 @@ const ABFWReport = ({
                     borderColor="blue.200"
                     borderRadius="md"
                     bg="white"
-                    p={8}
+                    p={{ base: 2, sm: 4, md: 8 }}
                 >
-                    <VStack align="stretch" gap={4} mb={6}>
-                        <Heading size="2xl" textAlign="center">
+                    <VStack
+                        align="stretch"
+                        gap={{ base: 2, md: 4 }}
+                        mb={{ base: 4, md: 6 }}
+                    >
+                        <Heading
+                            size={{ base: "lg", sm: "xl", md: "2xl" }}
+                            textAlign="center"
+                        >
                             Relatório ABFW
                         </Heading>
 
@@ -136,27 +144,47 @@ const ABFWReport = ({
                             border="2px solid"
                             borderColor="blue.200"
                             borderRadius="md"
-                            p={4}
+                            p={{ base: 2, md: 4 }}
                             bg="blue.50"
                         >
-                            <HStack justify="space-between" gap={8}>
-                                <Box>
-                                    <Text fontWeight="bold" color="gray.600">
+                            <HStack
+                                justify="space-between"
+                                gap={{ base: 2, md: 4, lg: 8 }}
+                                flexWrap={{ base: "wrap", md: "nowrap" }}
+                            >
+                                <Box minWidth={{ base: "100%", sm: "auto" }}>
+                                    <Text
+                                        fontWeight="bold"
+                                        color="gray.600"
+                                        fontSize={{ base: "xs", md: "sm" }}
+                                    >
                                         Nome:
                                     </Text>
-                                    <Text fontSize="lg">{info.name}</Text>
+                                    <Text fontSize={{ base: "sm", md: "lg" }}>
+                                        {info.name}
+                                    </Text>
                                 </Box>
-                                <Box>
-                                    <Text fontWeight="bold" color="gray.600">
+                                <Box minWidth={{ base: "45%", sm: "auto" }}>
+                                    <Text
+                                        fontWeight="bold"
+                                        color="gray.600"
+                                        fontSize={{ base: "xs", md: "sm" }}
+                                    >
                                         Idade:
                                     </Text>
-                                    <Text fontSize="lg">{info.age} anos</Text>
+                                    <Text fontSize={{ base: "sm", md: "lg" }}>
+                                        {info.age} anos
+                                    </Text>
                                 </Box>
-                                <Box>
-                                    <Text fontWeight="bold" color="gray.600">
+                                <Box minWidth={{ base: "45%", sm: "auto" }}>
+                                    <Text
+                                        fontWeight="bold"
+                                        color="gray.600"
+                                        fontSize={{ base: "xs", md: "sm" }}
+                                    >
                                         Data:
                                     </Text>
-                                    <Text fontSize="lg">
+                                    <Text fontSize={{ base: "sm", md: "lg" }}>
                                         {info.date
                                             .split("-")
                                             .reverse()
@@ -176,10 +204,10 @@ const ABFWReport = ({
                     >
                         <Box>
                             <Heading
-                                size="md"
+                                size={{ base: "sm", md: "md" }}
                                 bg="blue.600"
                                 color="white"
-                                p={2}
+                                p={{ base: 1, md: 2 }}
                                 borderRadius="md"
                                 mb={2}
                                 textAlign="center"
@@ -207,16 +235,17 @@ const ABFWReport = ({
                                     totalCorrect={imitationTotals.totalCorrect}
                                     totalWrong={imitationTotals.totalWrong}
                                     percentage={imitationTotals.percentage}
+                                    showLabel={false}
                                 />
                             </Grid>
                         </Box>
 
                         <Box>
                             <Heading
-                                size="md"
+                                size={{ base: "sm", md: "md" }}
                                 bg="purple.600"
                                 color="white"
-                                p={2}
+                                p={{ base: 1, md: 2 }}
                                 borderRadius="md"
                                 mb={2}
                                 textAlign="center"
@@ -244,16 +273,17 @@ const ABFWReport = ({
                                     totalCorrect={nomeationTotals.totalCorrect}
                                     totalWrong={nomeationTotals.totalWrong}
                                     percentage={nomeationTotals.percentage}
+                                    showLabel={false}
                                 />
                             </Grid>
                         </Box>
 
                         <Box>
                             <Heading
-                                size="md"
+                                size={{ base: "sm", md: "md" }}
                                 bg="green.600"
                                 color="white"
-                                p={2}
+                                p={{ base: 1, md: 2 }}
                                 borderRadius="md"
                                 mb={2}
                                 textAlign="center"
@@ -279,6 +309,7 @@ const ABFWReport = ({
                                     totalCorrect={overallTotals.totalCorrect}
                                     totalWrong={overallTotals.totalWrong}
                                     percentage={overallTotals.percentage}
+                                    showLabel={true}
                                 />
                             </Grid>
                         </Box>
