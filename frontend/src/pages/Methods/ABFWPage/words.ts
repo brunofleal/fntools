@@ -21,7 +21,7 @@ export const wordsImitation: WordAndTranscription[] = [
     { word: "Prego", transcription: "prɛ.gu" },
     { word: "Café", transcription: "ka.fɛ" },
     { word: "Alface", transcription: "aw.fa.si" },
-    { word: "Raposa", transcription: "ra.po.zɐ" },
+    { word: "Raposa", transcription: "xa.po.zɐ" },
     { word: "Borracha", transcription: "bu.xa.ʃɐ" },
     { word: "Abelha", transcription: "a.be.ʎɐ" },
     { word: "Carro", transcription: "ka.xu" },
@@ -40,7 +40,7 @@ export const wordsImitation: WordAndTranscription[] = [
     { word: "Porco", transcription: "pox.ku" },
     { word: "Nariz", transcription: "na.ris" },
     { word: "Amor", transcription: "a.mox" },
-    { word: "Roupa", transcription: "row.pɐ" },
+    { word: "Roupa", transcription: "xow.pɐ" },
 ];
 
 export const wordsNomeation: WordAndTranscription[] = [

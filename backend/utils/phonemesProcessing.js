@@ -1,21 +1,30 @@
-const specialCharacters = ["r", "s", "l"];
+const specialCharacters = ["r", "x", "s", "l"];
 const specialPhonemes = {
     cLv: "cLv",
     cRv: "cRv",
+    l_start: "l",
+    x_start: "x",
     S_start: "s",
     S_end: "[S]",
+    rVib: "r",
     R: "[R]",
 };
 // Consonant + l + vowel (e.g., "pla", "blo", "klu")
 const regexClv = /[pbmtdnkgfvszʃʒɲʎʁ]l[ãaɐɛeeiĩɔoouw]/;
-// Consonant + r/x + vowel (e.g., "pra", "bro", "kru")
-const regexCrv = /[pbmtdnkgfvszʃʒɲʎʁ][rɾʁ][ãaɐɛeeiĩɔoouw]/;
+// l at the start of the syllable (e.g., "la" in "lã.mɐ")
+const regex_l = /^l/;
+// Consonant + r + vowel (e.g., "pra", "bro", "kru")
+const regexCrv = /[pbmtdnkgfvszʃʒɲʎʁ][r][ãaɐɛeeiĩɔoouw]/;
+// r at the start of the syllable (e.g., "ba.ra.tɐ")
+const regexRVibrant = /^r/;
+// x at the start of the syllable (e.g., "xo" in "xow.pɐ")
+const regexX_start = /^x/;
 // s at the end of the syllable (e.g., "pas", "mas")
 const regexS_end = /s$/;
-// s at the start of the syllable (e.g., "si" in "doce")
+// s at the start of the syllable (e.g., "si" in "do.si")
 const regexS_start = /^s/;
-// r/x at the end of the syllable (e.g., "box", "mar")
-const regexR = /[rxɾʁ]$/;
+// r at the end of the syllable (e.g., "max", "bax")
+const regexR = /[x]$/;
 
 const processSyllable = (
     dataProcessed,
@@ -34,14 +43,44 @@ const processSyllable = (
             isCorrect
         );
     }
+    if (regex_l.test(syllable)) {
+        const hitIndex = syllableTranscriptionStartIndex; // first character position
+        const isCorrect = sourceAndTarget.target.hits[hitIndex];
+        dataProcessed = addToData(
+            dataProcessed,
+            sourceAndTarget,
+            specialPhonemes.l_start,
+            isCorrect
+        );
+    }
     if (regexCrv.test(syllable)) {
         const matchIndex = syllable.search(regexCrv);
-        const hitIndex = syllableTranscriptionStartIndex + matchIndex + 1; // +1 to get the 'r/x' position
+        const hitIndex = syllableTranscriptionStartIndex + matchIndex + 1; // +1 to get the 'r' position
         const isCorrect = sourceAndTarget.target.hits[hitIndex];
         dataProcessed = addToData(
             dataProcessed,
             sourceAndTarget,
             specialPhonemes.cRv,
+            isCorrect
+        );
+    }
+    if (regexRVibrant.test(syllable)) {
+        const hitIndex = syllableTranscriptionStartIndex; // first character position
+        const isCorrect = sourceAndTarget.target.hits[hitIndex];
+        dataProcessed = addToData(
+            dataProcessed,
+            sourceAndTarget,
+            specialPhonemes.rVib,
+            isCorrect
+        );
+    }
+    if (regexX_start.test(syllable)) {
+        const hitIndex = syllableTranscriptionStartIndex; // first character position
+        const isCorrect = sourceAndTarget.target.hits[hitIndex];
+        dataProcessed = addToData(
+            dataProcessed,
+            sourceAndTarget,
+            specialPhonemes.x_start,
             isCorrect
         );
     }
@@ -54,7 +93,8 @@ const processSyllable = (
             specialPhonemes.S_end,
             isCorrect
         );
-    } else if (regexS_start.test(syllable)) {
+    }
+    if (regexS_start.test(syllable)) {
         const hitIndex = syllableTranscriptionStartIndex; // first character position
         const isCorrect = sourceAndTarget.target.hits[hitIndex];
         dataProcessed = addToData(
@@ -80,7 +120,10 @@ const processSyllable = (
 const isSpecialSyllablePhonemCase = (syllable) => {
     return (
         regexClv.test(syllable) ||
+        regex_l.test(syllable) ||
         regexCrv.test(syllable) ||
+        regexRVibrant.test(syllable) ||
+        regexX_start.test(syllable) ||
         regexS_end.test(syllable) ||
         regexS_start.test(syllable) ||
         regexR.test(syllable)
